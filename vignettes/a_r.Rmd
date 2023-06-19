@@ -1,0 +1,46 @@
+---
+title: "A. Introduction to R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{A. Introduction to R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# To use this workshop
+
+1. Visit https://workshop.bioconductor.org/
+2. Register or log-in
+3. choose the 'ArtNET 2023'
+4. Wait a minute or so
+5. Click to open RStudio
+6. In RStudio, choose 'File' / 'Open File...' / 'vignettes/a_r.Rmd'
+
+    ![](images/galaxy-screen.png)
+
+# Introduction
+
+```{r setup}
+library(ArtNET2023)
+```
+
+# Summary
+
+## Session information
+
+This document was produced with the following *R* software:
+
+```{r session_info}
+sessionInfo()
+```
+
+```{r include = FALSE}
+## clean up .GlobalEnv at end of vignette
+rm(list = ls(envir = .GlobalEnv, all.names = TRUE), envir = .GlobalEnv)

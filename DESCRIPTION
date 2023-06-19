@@ -1,28 +1,34 @@
-Package: BuildABiocWorkshop
-Title: Bioconductor or R Workshop Template and Github Actions
-Version: 2.0.0
+Package: ArtNET2023
+Title: R / Bioconductor Workshop for ArtNET 2023 Annual Meeting
+Version: 0.0.0.1
 Authors@R: 
-    person(given = "Sean",
-           family = "Davis",
-           role = c("aut", "cre"),
-           email = "seandavi@gmail.com",
-           comment = c(ORCID = "0000-0002-8991-6458"))
-Description: This package serves as a template for using github actions to 
-    prepare a Bioconductor Workshop package for use. In particular,
-    a pkgdown website and docker image are generated based on workflow 
-    settings. 
-License: MIT + file LICENSE
+    c(person(
+        "Martin", "Morgan",
+        role = c("aut", "cre"),
+        email = "Martin.Morgan@RoswellPark.org",
+        comment = c(ORCID = "0000-0002-5874-8148")
+    ), person(
+        "NIH NHGRI U24HG004059",
+        role = "fnd"
+    ))
+Description: This workshop provides an introduction to using R and
+    Bioconductor to explore single-cell gene expression data. We focus
+    on ‘downstream’ analysis, for example after a bioinformatics core
+    has performed initial cell type classification, differential gene
+    expression, etc. Example tasks we will cover include data input of
+    ‘csv’ and other files, visualization (e.g., UMAPs), and essential
+    statistical analysis (e.g., simple survivorship). Participants
+    with some exposure to R and RStudio will be well-positioned to
+    benefit from this workshop.
+License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
-Depends: 
-    Biobase
 Suggests: 
-    knitr,
-    rmarkdown,
-    pkgdown
-URL: https://seandavi.github.io/BuildABiocWorkshop/
-BugReports: https://github.com/seandavi/BuildABiocWorkshop/issues/new/choose
+    dplyr, ggplot2, Seurat, SingleCellExperiment,
+    knitr, rmarkdown, pkgdown
+URL: https://mtmorgan.github.io/ArtNET2023/
+BugReports: https://github.com/mtmorgan/ArtNET2023/issues/new/choose
 VignetteBuilder: knitr
-DockerImage: ghcr.io/seandavi/buildabiocworkshop:latest
+DockerImage: ghcr.io/mtmorgan/ArtNET2023:latest

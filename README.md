@@ -1,52 +1,46 @@
-# BuildABiocWorkshop
+# R / Bioconductor Workshop for ArtNET 2023 Annual Meeting
 
-This package is a template for building a Bioconductor workshop. The package
-includes Github actions to:
+This document is located at https://mtmorgan.github.io/ArtNET2023
 
-1. Set up bioconductor/bioconductor_docker:devel on Github resources
-2. Install package dependencies for your package (based on the `DESCRIPTION` file)
-3. Run `rcmdcheck::rcmdcheck`
-4. Build a pkgdown website and push it to github pages
-5. Build a docker image with the installed package and dependencies and deploy to [the Github Container Repository](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#pulling-container-images) at the name `ghcr.io/gihub_user/repo_name`, all lowercase. 
+<!-- ![](man/figures/bit.ly_3p1SE4J.jpeg){width=200px} -->
 
-## Responsibilities
+This resource contains material presented at the ArtNET2023 Annual
+Meeting, June, 2023 in Buffalo, New York.
 
-Package authors are primarily responsible for:
+This two-hour workshop provides an introduction to using _R_ and
+_Bioconductor_ to explore single-cell gene expression data. We focus
+on ‘downstream’ analysis, for example after a bioinformatics core has
+performed initial cell type classification, differential gene
+expression, etc. Example tasks we will cover include data input of
+‘csv’ and other files, visualization (e.g., UMAPs), and essential
+statistical analysis (e.g., simple survivorship). Participants with
+some exposure to R and RStudio will be well-positioned to benefit from
+this workshop.
 
-1. Creating a landing site of their choosing for their workshops (a website). This website should be listed in the `DESCRIPTION` file as the `URL`.
-2. Creating a docker image that will contain workshop materials and the installed packages necessary to run those materials. The name of the resulting docker image, including "tag" if desired, should be listed in a non-standard tag, `DockerImage:` in the `DESCRIPTION` file. 
+The workshop consists of 3 short chapters:
 
-Both of those tasks can be accomplished using the Github actions included in this template package. The vignette accompanying this package describes how to accomplish both of these tasks.
+- [Introduction to _R_][A] -- _R_ vectors, data.frames, and packages
+  for data management and visualization. Kaplan-Meier curves.
+- [Exploring Bioinformatic Data][B] -- Summarizing single cell
+  samples, UMAP visualization, differential expression.
+- [_R_ and _Bioconductor_ for Single-Cell Analysis][C] -- introducing
+  _R_ packages for comprehensive analysis of single-cell data.
 
-## Details
+[A]: articles/a_r.html
+[B]: articles/b_single_cell.html
+[C]: articles/c_seurat_bioconductor.html
 
-For detailed instructions, see the `How to build a workshop` article/vignette.
+In addition to the material for the material in these notes, the
+workshop includes
 
-## Results of successful deployment
+- A pre-configured [cloud-based instance][cloud] for 'following along' in your
+  own RStudio session during the workshop.
+- A 'docker' image to use locally after the workshop is over. After
+  runnig the following comand, join the RStudio session at
+  `https://localhost:8787`.
 
-- A working docker image that contains the installed package and dependencies.
-- An up-to-date `pkgdown` website at https://YOURUSERNAME.github.io/YOURREPOSITORYNAME/
-- Docker image will be tagged with `latest`, `sha-XXXXXX` where `XXXXXX` is the hash of the current `master` commit, and `master`. 
+    ```sh
+    docker run -e PASSWORD=<FIXME> -p 8787:8787 ghcr.io/mtmorgan/ArtNET2023:latest
+    ```
 
-## To use the resulting image:
-
-```sh
-docker run -e PASSWORD=<choose_a_password_for_rstudio> -p 8787:8787 YOURDOCKERIMAGENAME
-```
-Once running, navigate to http://localhost:8787/ and then login with `rstudio`:`yourchosenpassword`. 
-
-To try with **this** repository docker image:
-
-```sh
-docker run -e PASSWORD=abc -p 8787:8787 ghcr.io/bioconductor/buildabiocworkshop
-```
-
-*NOTE*: Running docker that uses the password in plain text like above exposes the password to others 
-in a multi-user system (like a shared workstation or compute node). In practice, consider using an environment 
-variable instead of plain text to pass along passwords and other secrets in docker command lines. 
-
-
-## Whatcha get
-
-- https://bioconductor.github.io/BuildABiocWorkshop
-- A Docker image that you can run locally, in the cloud, or (usually) even as a singularity container on HPC systems. 
+[cloud]: https://workshop.bioconductor.org/
