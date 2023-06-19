@@ -1,11 +1,11 @@
-pandoc: 3.1.1
+pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   a_r: a_r.html
   b_single_cell: b_single_cell.html
   c_seurat_bioconductor: c_seurat_bioconductor.html
-last_built: 2023-06-19T12:52Z
+last_built: 2023-06-19T14:22Z
 urls:
   reference: https://mtmorgan.github.io/ArtNET2023/reference
   article: https://mtmorgan.github.io/ArtNET2023/articles
