@@ -44,3 +44,4 @@ sessionInfo()
 ```{r include = FALSE}
 ## clean up .GlobalEnv at end of vignette
 rm(list = ls(envir = .GlobalEnv, all.names = TRUE), envir = .GlobalEnv)
+```

@@ -26,7 +26,8 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
-    dplyr, ggplot2, Seurat, SingleCellExperiment,
+    dplyr, ggplot2, plotly, survival, ggfortify, tidyr, readr,
+    Seurat, SingleCellExperiment,
     knitr, rmarkdown, pkgdown
 URL: https://mtmorgan.github.io/ArtNET2023/
 BugReports: https://github.com/mtmorgan/ArtNET2023/issues/new/choose

@@ -248,7 +248,7 @@ ggplotly(plt)
 - [Bioconductor][]: More than 2100 packages relevant to
   high-throughput genomic analysis. _Vignettes_ are an important part
   of _Bioconductor_ packages.
-  
+
 Install packages once per _R_ installation, using
 `BiocManager::install(<package-name>)` (CRAN or Bioconductor)
 
@@ -268,7 +268,7 @@ maintenance of their package.
 
 1. Help pages, e.g., `?lm`
 
-2. Vignettes, e.g., 
+2. Vignettes, e.g.,
 
     ```{r, eval = FALSE}
     vignette(package = "ggplot2")
@@ -277,7 +277,146 @@ maintenance of their package.
 
 3. Google, StackOverflow, etc...
 
-## Survival analysis
+# Survival analysis
+
+These notes are from [Survival Analysis with R][SAR]
+
+## Basic Kaplan-Meier analysis
+
+```{r}
+library(survival)  # base R package for survival analysis
+library(dplyr)     # data representation
+library(ggplot2)   # pretty pictures
+library(ggfortify) # 'autoplot'
+```
+
+## An example dataset
+
+We use data derived from the built-in 'veterans' dataset from the
+'Veterans' Administration Lung Cancer study'; see `?veterans` for
+details.
+
+```{r}
+## use `file.choose()` or similar for your own data sets
+veteran_csv <- system.file(package = "ArtNET2023", "extdata/veteran.csv")
+veteran <- readr::read_csv(veteran_csv)
+veteran
+```
+
+Columns in the datasset are described as:
+
+- trt: 1=standard, 2=test
+- celltype: squamous, smallcell, adeno, large
+- time: survival time (months?)
+- status: censoring status
+- karno: Karnofsky performance score (100=good)
+- diagtime: months from diagnosis to randomisation
+- age: in years
+- prior: prior therapy 0=no, 10=yes
+
+Some of the covariate can be summarized using 'tidy' functions, e.g.,
+
+```{r}
+veteran |>
+    count(celltype, trt) |>
+    tidyr::pivot_wider(names_from = trt, values_from = n)
+```
+
+For continuous variables like `age`, it may be useful to stratify the
+data, e.g., separating individuals as less than 60 (`LT60`), or
+greater than or equal to 60 (`GE60`). For `trt`, the encoding is a
+`double`, but it makes more sense for this to be a categorical
+variable
+
+```{r}
+veteran <-
+    veteran |>
+    mutate(
+        age_group = factor(ifelse((age < 60), "LT60", "GE60")),
+        trt = factor(trt, labels = c("control", "treatment"))
+    )
+```
+
+The `celltype` and `trt` summary table is more informative
+
+```{r}
+veteran |>
+    count(celltype, trt) |>
+    tidyr::pivot_wider(names_from = trt, values_from = n)
+```
+
+## Kaplan-Meier curve for the entire data
+
+Fit a standard survival model to the entire dataset
+
+```{r}
+km <- survfit(Surv(time, status) ~ 1, veteran)
+```
+
+It is useful to know the 'class' of `km`
+
+```{r}
+class(km)
+```
+
+And to get a summary of the data after different lengths of time...
+
+```{r}
+summary(km, times = c(1, 30, 60, 90, 180, 360, 720))
+```
+
+... but nothing communicates like a figure (for help with the
+`autoplot` function applied to `survfit` object, see
+`?autoplot.survfit`).
+
+```{r}
+autoplot(km)
+```
+
+## Kaplan-Meier curve stratified by treatment or age group
+
+It is easy to fit Kaplan-Meier curves to groups, e.g,. treatment
+
+```{r}
+km_trt <- survfit(Surv(time, status) ~ trt, data=veteran)
+autoplot(km_trt)
+```
+
+```{r}
+km_age <- survfit(Surv(time, status) ~ age_group, veteran)
+autoplot(km_age)
+```
+
+## Cox proportional hazards model
+
+Kaplan-Meier plots are useful for visualization, but is there
+statistical support for an effect of treatment? Use the Cox
+proportional hazards model as a basis for statical understand. In the
+summary table, `trttest` indicates that the summary reports the effect
+of `test` compared to `standard` as the base line.
+
+```{r}
+cox <- coxph(
+    Surv(time, status) ~ trt,
+    data = veteran
+)
+summary(cox)
+```
+
+It is straight-forward to test more complicated models, e.g., whether
+`age` is a statistically meaningful contribution to survival, although
+interpretation even of this 'simple' model should probably be
+discussed with a statistician.
+
+```{r}
+cox <- coxph(
+    Surv(time, status) ~ age + trt,
+    data = veteran
+)
+summary(cox)
+```
+
+[SAR]: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
 
 # Summary
 
@@ -292,3 +431,4 @@ sessionInfo()
 ```{r include = FALSE}
 ## clean up .GlobalEnv at end of vignette
 rm(list = ls(envir = .GlobalEnv, all.names = TRUE), envir = .GlobalEnv)
+```
