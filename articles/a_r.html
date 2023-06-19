@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ArtNET2023</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.3</span>
       </span>
     </div>
 
@@ -78,7 +78,9 @@
 
       
 
-      </header><div class="row">
+      </header><script src="a_r_files/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="a_r_files/plotly-binding-4.10.2/plotly.js"></script><script src="a_r_files/typedarray-0.1/typedarray.min.js"></script><link href="a_r_files/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="a_r_files/crosstalk-1.2.0/js/crosstalk.min.js"></script><link href="a_r_files/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="a_r_files/plotly-main-2.11.1/plotly-latest.min.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>A. Introduction to R</h1>
@@ -110,8 +112,327 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>This article introduces <em>R</em> as an essential tool in
+exploratory analysis of bioinformatic data. No previous experience with
+<em>R</em> is required. We start with a very short introduction to
+<em>R</em>, mentioning vectors, functions, and the
+<code>data.frame</code> for representing tabular data. We introduces
+‘packages’ that extend base <em>R</em> functionality, and explore some
+essential data management tasks, reading a ‘CSV’ (comma-separated value)
+file, and visualizing data. We conclude in a short work-flow to read in
+data and perform a Kaplan-Meier survival analysis, including generating
+a graphical summary.</p>
+</div>
+<div class="section level2">
+<h2 id="essential-r">Essential <em>R</em><a class="anchor" aria-label="anchor" href="#essential-r"></a>
+</h2>
+<p>A simple calculator</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mtmorgan.github.io/ArtNET2023/">ArtNET2023</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fl">1</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span><span class="co">#&gt; [1] 2</span></span></code></pre></div>
+<p>‘Vectors’ as building blocks</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1 2 3</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"January"</span>, <span class="st">"February"</span>, <span class="st">"March"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "January"  "February" "March"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1]  TRUE FALSE</span></span></code></pre></div>
+<p>Variables, missing values and ‘factors’</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">27</span>, <span class="cn">NA</span>, <span class="fl">32</span>, <span class="fl">29</span><span class="op">)</span></span>
+<span><span class="va">gender</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Female"</span>, <span class="st">"Male"</span>, <span class="st">"Non-binary"</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>    levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Female"</span>, <span class="st">"Male"</span>, <span class="st">"Non-binary"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Data structures to coordinate related vectors – the
+<code>data.frame</code></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">27</span>, <span class="cn">NA</span>, <span class="fl">32</span>, <span class="fl">29</span><span class="op">)</span>,</span>
+<span>    gender <span class="op">=</span> <span class="va">gender</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">df</span></span>
+<span><span class="co">#&gt;   age     gender</span></span>
+<span><span class="co">#&gt; 1  27     Female</span></span>
+<span><span class="co">#&gt; 2  NA       Male</span></span>
+<span><span class="co">#&gt; 3  32 Non-binary</span></span>
+<span><span class="co">#&gt; 4  29       &lt;NA&gt;</span></span></code></pre></div>
+<p>Key opererations on <code>data.frame</code></p>
+<ul>
+<li>
+<code>df[1:3, c("gender", "age")]</code> – subset on rows and
+columns</li>
+<li>
+<code>df[["age"]]</code>, <code>df$age</code> – select columns</li>
+</ul>
+<p>Functions</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>        <span class="co"># 5 random normal deviates</span></span>
+<span><span class="co">#&gt; [1] -0.08587326 -0.98200280  0.36003056 -0.88533633 -0.20957783</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span> <span class="co"># 100 random normal deviates</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>         <span class="co"># histogram, approximately normal</span></span></code></pre></div>
+<p><img src="a_r_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/density.html" class="external-link">density</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="co"># a little more sophisticated?</span></span></code></pre></div>
+<p><img src="a_r_files/figure-html/unnamed-chunk-6-2.png" width="700"></p>
+<p>‘Vectorized’ operations, e.g., element-wise addition without an
+explicit ‘for’ loop</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">fit</span>         <span class="co"># an R 'object' containing information about the</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; lm(formula = y ~ x)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt; (Intercept)            x  </span></span>
+<span><span class="co">#&gt;      0.1414       0.9585</span></span>
+<span>            <span class="co"># regression of y on x</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="co"># plot points and fitted regression line</span></span></code></pre></div>
+<p><img src="a_r_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>  <span class="co"># statistical summary of linear regression</span></span>
+<span><span class="co">#&gt; Analysis of Variance Table</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Response: y</span></span>
+<span><span class="co">#&gt;           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; x          1 116.732 116.732  141.28 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; Residuals 98  80.973   0.826                      </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<p>Write your own functions</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hello</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">who</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"hello"</span>, <span class="va">who</span>, <span class="st">"with"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">who</span><span class="op">)</span>, <span class="st">"letters in your name"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu">hello</span><span class="op">(</span><span class="st">"Martin"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "hello Martin with 6 letters in your name"</span></span></code></pre></div>
+<p>Iterate, usually with <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code> although
+<code>for()</code> is available</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Martin"</span>, <span class="st">"Thomas"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">names</span>, <span class="va">hello</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] "hello Martin with 6 letters in your name"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] "hello Thomas with 6 letters in your name"</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="packages">Packages<a class="anchor" aria-label="anchor" href="#packages"></a>
+</h2>
+<p>Extend functionality of base <em>R</em>. Can be part of the ‘base’
+distribution…</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>… or a package contributed by users to the Comprehensive R Archive
+Network (<a href="https://cran.r-project.org/web/packages/available_packages_by_name.html" class="external-link">CRAN</a>),
+or to <a href="https://bioconductor.org/packages" class="external-link">Bioconductor</a> or
+other repositories. A particularly common suite of packages is the
+‘tidyverse’. To use the <a href="https://cran.r-project.org/package=dplyr" class="external-link">dplyr</a> contributed
+CRAN package, load the package</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<p>A dplyr ‘tibble’ is like a ‘data.frame’, but more user-friendly</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tbl</span> <span class="co"># e.g., only displays the first 10 rows</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 100 × 2</span></span></span>
+<span><span class="co">#&gt;         x      y</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> -<span style="color: #BB0000;">0.724</span> -<span style="color: #BB0000;">0.236</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> -<span style="color: #BB0000;">0.779</span> -<span style="color: #BB0000;">1.58</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> -<span style="color: #BB0000;">1.48</span>   0.332</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>  1.40   0.626</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> -<span style="color: #BB0000;">1.14</span>  -<span style="color: #BB0000;">1.58</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>  1.87   0.479</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>  0.364  0.440</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> -<span style="color: #BB0000;">1.11</span>  -<span style="color: #BB0000;">0.744</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> -<span style="color: #BB0000;">2.45</span>  -<span style="color: #BB0000;">3.18</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  1.20   2.15 </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 90 more rows</span></span></span></code></pre></div>
+<p>The tidyverse makes use of ‘pipes’ <code>|&gt;</code> (the older
+syntax is <code>%&gt;%</code>). A pipe takes the left-hand side and pass
+through to the right-hand side. Key <a href="https://cran.r-project.org/package=dplyr" class="external-link">dplyr</a> ‘verbs’ can be
+piped together</p>
+<ul>
+<li>
+<code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble()</a></code> – representation of a <code>data.frame</code>,
+with better display of long and wide data frames. <code><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble()</a></code>
+constructs a tibble in a way that makes the relationship between data
+across rows more transparent.</li>
+<li>
+<code><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse()</a></code> – providing a quick look into the columns and
+data in the tibble by transposing the tibble and display each ‘column’
+on a single line.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select()</a></code> – column selection.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice()</a></code> – row selection.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull()</a></code> – extract a single column as a vector.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate()</a></code> – column transformation.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count()</a></code> – count occurences in one or more columns.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange()</a></code> – order rows by values in one or more
+columns.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct()</a></code> – reduce a tibble to only unique rows.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> – perform computations on groups defined by
+one or several columns.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize()</a></code> – calculate summary statstics for
+groups.</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join()</a></code>,
+<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join()</a></code> – merge two tibbles based on shared columns,
+preserving all rows in the first (<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join()</a></code>) or second
+(<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join()</a></code>) or both (<code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join()</a></code>)
+tibble.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">|&gt;</span></span>
+<span>    <span class="co">## e.g., just rows with non-negative values of x and y</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="va">y</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="co">## add a column</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>distance_from_origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">y</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 39 × 3</span></span></span>
+<span><span class="co">#&gt;        x     y distance_from_origin</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 1.40  0.626                1.53 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 1.87  0.479                1.93 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 0.364 0.440                0.571</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 1.20  2.15                 2.47 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 1.96  2.19                 2.94 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.664 0.359                0.755</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 0.115 0.366                0.384</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 1.44  0.476                1.52 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.442 0.833                0.943</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.750 0.601                0.961</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 29 more rows</span></span></span></code></pre></div>
+<p>A ‘classic’ built-in data set – Motor Trend ‘cars’ from 1974…
+‘tidyverse’ eschews rownames, so make these a column. Use
+<code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> to summarize by group (<code>cyl</code>).
+<code><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n()</a></code> is a function from dplyr that returns the number of
+records in a group.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mtcars_tbl</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">mtcars</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span>rownames <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cyl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mtcars_tbl</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 32 × 12</span></span></span>
+<span><span class="co">#&gt;    model         mpg cyl    disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Mazda RX4    21   6      160    110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Mazda RX4 …  21   6      160    110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Datsun 710   22.8 4      108     93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Hornet 4 D…  21.4 6      258    110  3.08  3.22  19.4     1     0     3     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Hornet Spo…  18.7 8      360    175  3.15  3.44  17.0     0     0     3     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Valiant      18.1 6      225    105  2.76  3.46  20.2     1     0     3     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Duster 360   14.3 8      360    245  3.21  3.57  15.8     0     0     3     4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Merc 240D    24.4 4      147.    62  3.69  3.19  20       1     0     4     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Merc 230     22.8 4      141.    95  3.92  3.15  22.9     1     0     4     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Merc 280     19.2 6      168.   123  3.92  3.44  18.3     1     0     4     4</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 22 more rows</span></span></span>
+<span></span>
+<span><span class="va">mtcars_tbl</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span></span>
+<span>        n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        mean_mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mpg</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>        var_mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">mpg</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
+<span><span class="co">#&gt;   cyl       n mean_mpg var_mpg</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 4        11     26.7   20.3 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 6         7     19.7    2.11</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 8        14     15.1    6.55</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
+</h3>
+<p>Let’s return to a basic tibble</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Use the contributed package <a href="https://cran.r-project.org/package=ggplot2" class="external-link">ggplot2</a> for
+visualization.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">+</span>                <span class="co"># use 'x' and 'y' columns for plotting...</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>             <span class="co"># ...plot points...</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="co"># ...linear regresion</span></span></code></pre></div>
+<p><img src="a_r_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p>Check out <a href="https://cran.r-project.org/package=plotly" class="external-link">plotly</a>, especially
+for interactive visualization (e.g., ‘tooltips’ when mousing over
+points, or dragging to subset and zoom in)</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://plotly-r.com" class="external-link">plotly</a></span><span class="op">)</span></span>
+<span><span class="va">plt</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars_tbl</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">mpg</span>, text <span class="op">=</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html" class="external-link">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/plotly/man/ggplotly.html" class="external-link">ggplotly</a></span><span class="op">(</span><span class="va">plt</span><span class="op">)</span></span></code></pre></div>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-97ae8431e1be504047c7" style="width:700px;height:432.632880098888px;"></div>
+<script type="application/json" data-for="htmlwidget-97ae8431e1be504047c7">{"x":{"data":[{"x":[2.1003947785357013,1.7789794221753255,1.1806239441502839,2.1413266835734248,3.1163499092217535,1.9492119114147499,2.955773051129654,1.1183638385264203,0.98428865359164774,2.141955511411652,2.1595039875246584,2.753149448428303,3.0935691826744005,3.0976525276200846,2.9469208447262645,2.890557860257104,3.0234904290409759,0.83907359431032091,0.93389373761601746,0.83101607288699597,1.0497391911922023,3.2242354202317074,2.8805061858147383,2.7651311795925722,3.2465798791963607,0.86932202184107155,1.1576256081461906,1.1072010875213891,3.1098781041800976,2.1485413537593558,2.7831752566853538,0.94223489344585687],"y":[21.003785396702586,20.974871707241981,22.77729638075456,21.411792721021918,18.700205275882034,18.080913260430098,14.288821865767241,24.383195927739141,22.817129002269358,19.184605887178332,17.773163218665868,16.404057741872965,17.322807311099023,15.215913239121436,10.424016365166754,10.42040991909802,14.693724333010612,32.383153390884395,30.416084492802618,33.928173131886865,21.466218893397599,15.500124432425945,15.197360325679183,13.336266560982914,19.239468942992389,27.273407733999193,25.987519592102618,30.419416852034626,15.79370811874047,19.69725095067173,15.039120094869286,21.375998281408101],"text":["cyl: 6<br />mpg: 21.0<br />Mazda RX4","cyl: 6<br />mpg: 21.0<br />Mazda RX4 Wag","cyl: 4<br />mpg: 22.8<br />Datsun 710","cyl: 6<br />mpg: 21.4<br />Hornet 4 Drive","cyl: 8<br />mpg: 18.7<br />Hornet Sportabout","cyl: 6<br />mpg: 18.1<br />Valiant","cyl: 8<br />mpg: 14.3<br />Duster 360","cyl: 4<br />mpg: 24.4<br />Merc 240D","cyl: 4<br />mpg: 22.8<br />Merc 230","cyl: 6<br />mpg: 19.2<br />Merc 280","cyl: 6<br />mpg: 17.8<br />Merc 280C","cyl: 8<br />mpg: 16.4<br />Merc 450SE","cyl: 8<br />mpg: 17.3<br />Merc 450SL","cyl: 8<br />mpg: 15.2<br />Merc 450SLC","cyl: 8<br />mpg: 10.4<br />Cadillac Fleetwood","cyl: 8<br />mpg: 10.4<br />Lincoln Continental","cyl: 8<br />mpg: 14.7<br />Chrysler Imperial","cyl: 4<br />mpg: 32.4<br />Fiat 128","cyl: 4<br />mpg: 30.4<br />Honda Civic","cyl: 4<br />mpg: 33.9<br />Toyota Corolla","cyl: 4<br />mpg: 21.5<br />Toyota Corona","cyl: 8<br />mpg: 15.5<br />Dodge Challenger","cyl: 8<br />mpg: 15.2<br />AMC Javelin","cyl: 8<br />mpg: 13.3<br />Camaro Z28","cyl: 8<br />mpg: 19.2<br />Pontiac Firebird","cyl: 4<br />mpg: 27.3<br />Fiat X1-9","cyl: 4<br />mpg: 26.0<br />Porsche 914-2","cyl: 4<br />mpg: 30.4<br />Lotus Europa","cyl: 8<br />mpg: 15.8<br />Ford Pantera L","cyl: 6<br />mpg: 19.7<br />Ferrari Dino","cyl: 8<br />mpg: 15.0<br />Maserati Bora","cyl: 4<br />mpg: 21.4<br />Volvo 142E"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2,2,1,2,3,2,3,1,1,2,2,3,3,3,3,3,3,1,1,1,1,3,3,3,3,1,1,1,3,2,3,1],"y":[21,21,22.800000000000001,21.399999999999999,18.699999999999999,18.100000000000001,14.300000000000001,24.399999999999999,22.800000000000001,19.199999999999999,17.800000000000001,16.399999999999999,17.300000000000001,15.199999999999999,10.4,10.4,14.699999999999999,32.399999999999999,30.399999999999999,33.899999999999999,21.5,15.5,15.199999999999999,13.300000000000001,19.199999999999999,27.300000000000001,26,30.399999999999999,15.800000000000001,19.699999999999999,15,21.399999999999999],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,255,255,1)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":27.824636418824401,"r":7.3059360730593621,"b":41.778974318367787,"l":37.260273972602747},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,3.6000000000000001],"tickmode":"array","ticktext":["4","6","8"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["4","6","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"cyl","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[9.2235913434056567,35.104581788481205],"tickmode":"array","ticktext":["10","15","20","25","30","35"],"tickvals":[10,15,20,25,30,35],"categoryorder":"array","categoryarray":["10","15","20","25","30","35"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"mpg","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"65518963c53":{"x":{},"y":{},"text":{},"type":"scatter"},"6557444f799":{"x":{},"y":{},"text":{}}},"cur_data":"65518963c53","visdat":{"65518963c53":["function (y) ","x"],"6557444f799":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level3">
+<h3 id="where-do-packages-come-from">Where do Packages Come From?<a class="anchor" aria-label="anchor" href="#where-do-packages-come-from"></a>
+</h3>
+<ul>
+<li><p><a href="https://cran.r-project.org/web/packages/available_packages_by_name.html" class="external-link">CRAN</a>:
+<em>C</em>omprehensive <em>R</em> <em>A</em>rchive <em>N</em>etwork.
+More than 18,000 packages. Some help from <a href="https://cran.r-project.org/web/views/" class="external-link">CRAN Task Views</a> in
+identifying relevant packages.</p></li>
+<li><p><a href="https://bioconductor.org/packages" class="external-link">Bioconductor</a>:
+More than 2100 packages relevant to high-throughput genomic analysis.
+<em>Vignettes</em> are an important part of <em>Bioconductor</em>
+packages.</p></li>
+</ul>
+<p>Install packages once per <em>R</em> installation, using
+<code>BiocManager::install(&lt;package-name&gt;)</code> (CRAN or
+Bioconductor)</p>
+<p>What about GitHub? Packages haven’t been checked by a formal system,
+so may have incomplete code, documentation, dependencies on other
+packages, etc. Authors may not yet be committed to long-term maintenance
+of their package.</p>
+</div>
+<div class="section level3">
+<h3 id="help-vignettes">Help &amp; Vignettes<a class="anchor" aria-label="anchor" href="#help-vignettes"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li><p>Help pages, e.g., <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">?lm</a></code></p></li>
+<li>
+<p>Vignettes, e.g.,</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"ggplot2"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"ggplot2-specs"</span>, <span class="st">"ggplot2"</span><span class="op">)</span></span></code></pre></div>
+</li>
+<li><p>Google, StackOverflow, etc…</p></li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="survival-analysis">Survival analysis<a class="anchor" aria-label="anchor" href="#survival-analysis"></a>
+</h3>
+</div>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
@@ -121,7 +442,7 @@
 </h3>
 <p>This document was produced with the following <em>R</em>
 software:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.3.0 (2023-04-21)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
@@ -146,18 +467,25 @@ software:</p>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ArtNET2023_0.0.0.2</span></span>
+<span><span class="co">#&gt; [1] plotly_4.10.2 ggplot2_3.4.2 dplyr_1.1.2  </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43        rlang_1.1.1      </span></span>
-<span><span class="co">#&gt;  [5] xfun_0.39         stringi_1.7.12    purrr_1.0.1       textshaping_0.3.6</span></span>
-<span><span class="co">#&gt;  [9] jsonlite_1.8.5    glue_1.6.2        rprojroot_2.0.3   htmltools_0.5.5  </span></span>
-<span><span class="co">#&gt; [13] ragg_1.2.5        sass_0.4.6        rmarkdown_2.22    evaluate_0.21    </span></span>
-<span><span class="co">#&gt; [17] jquerylib_0.1.4   fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.3  </span></span>
-<span><span class="co">#&gt; [21] memoise_2.0.1     stringr_1.5.0     compiler_4.3.0    fs_1.6.2         </span></span>
-<span><span class="co">#&gt; [25] systemfonts_1.0.4 digest_0.6.31     R6_2.5.1          magrittr_2.0.3   </span></span>
-<span><span class="co">#&gt; [29] bslib_0.5.0       tools_4.3.0       pkgdown_2.0.7     cachem_1.0.8     </span></span>
-<span><span class="co">#&gt; [33] desc_1.4.2</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] tidyr_1.3.0       sass_0.4.6        utf8_1.2.3        generics_0.1.3   </span></span>
+<span><span class="co">#&gt;  [5] stringi_1.7.12    lattice_0.21-8    digest_0.6.31     magrittr_2.0.3   </span></span>
+<span><span class="co">#&gt;  [9] evaluate_0.21     grid_4.3.0        fastmap_1.1.1     rprojroot_2.0.3  </span></span>
+<span><span class="co">#&gt; [13] jsonlite_1.8.5    Matrix_1.5-4.1    httr_1.4.6        mgcv_1.8-42      </span></span>
+<span><span class="co">#&gt; [17] purrr_1.0.1       fansi_1.0.4       crosstalk_1.2.0   viridisLite_0.4.2</span></span>
+<span><span class="co">#&gt; [21] scales_1.2.1      lazyeval_0.2.2    textshaping_0.3.6 jquerylib_0.1.4  </span></span>
+<span><span class="co">#&gt; [25] cli_3.6.1         rlang_1.1.1       ellipsis_0.3.2    munsell_0.5.0    </span></span>
+<span><span class="co">#&gt; [29] splines_4.3.0     withr_2.5.0       cachem_1.0.8      yaml_2.3.7       </span></span>
+<span><span class="co">#&gt; [33] tools_4.3.0       memoise_2.0.1     colorspace_2.1-0  vctrs_0.6.3      </span></span>
+<span><span class="co">#&gt; [37] R6_2.5.1          lifecycle_1.0.3   stringr_1.5.0     htmlwidgets_1.6.2</span></span>
+<span><span class="co">#&gt; [41] fs_1.6.2          ragg_1.2.5        pkgconfig_2.0.3   desc_1.4.2       </span></span>
+<span><span class="co">#&gt; [45] pkgdown_2.0.7     pillar_1.9.0      bslib_0.5.0       gtable_0.3.3     </span></span>
+<span><span class="co">#&gt; [49] data.table_1.14.8 glue_1.6.2        systemfonts_1.0.4 xfun_0.39        </span></span>
+<span><span class="co">#&gt; [53] tibble_3.2.1      tidyselect_1.2.0  highr_0.10        knitr_1.43       </span></span>
+<span><span class="co">#&gt; [57] farver_2.1.1      htmltools_0.5.5   nlme_3.1-162      rmarkdown_2.22   </span></span>
+<span><span class="co">#&gt; [61] labeling_0.4.2    compiler_4.3.0</span></span></code></pre></div>
 </div>
 </div>
   </div>
