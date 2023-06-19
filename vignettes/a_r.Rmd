@@ -27,15 +27,263 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-```{r setup}
-library(ArtNET2023)
+This article introduces _R_ as an essential tool in exploratory
+analysis of bioinformatic data. No previous experience with _R_ is
+required. We start with a very short introduction to _R_, mentioning
+vectors, functions, and the `data.frame` for representing tabular
+data. We introduces 'packages' that extend base _R_ functionality, and
+explore some essential data management tasks, reading a 'CSV'
+(comma-separated value) file, and visualizing data. We conclude in a
+short work-flow to read in data and perform a Kaplan-Meier survival
+analysis, including generating a graphical summary.
+
+# Essential _R_
+
+A simple calculator
+
+```{r}
+1 + 1
 ```
+
+'Vectors' as building blocks
+
+```{r}
+c(1, 2, 3)
+c("January", "February", "March")
+c(TRUE, FALSE)
+```
+
+Variables, missing values and 'factors'
+
+```{r}
+age <- c(27, NA, 32, 29)
+gender <- factor(
+    c("Female", "Male", "Non-binary", NA),
+    levels = c("Female", "Male", "Non-binary")
+)
+```
+
+Data structures to coordinate related vectors -- the `data.frame`
+
+```{r}
+df <- data.frame(
+    age = c(27, NA, 32, 29),
+    gender = gender
+)
+df
+```
+
+Key opererations on `data.frame`
+
+- `df[1:3, c("gender", "age")]` -- subset on rows and columns
+- `df[["age"]]`, `df$age` -- select columns
+
+Functions
+
+```{r}
+rnorm(5)        # 5 random normal deviates
+x <- rnorm(100) # 100 random normal deviates
+hist(x)         # histogram, approximately normal
+plot(density(x)) # a little more sophisticated?
+```
+
+'Vectorized' operations, e.g., element-wise addition without an
+explicit 'for' loop
+
+
+```{r}
+y <- x + rnorm(100)
+plot(y ~ x)
+fit <- lm(y ~ x)
+fit         # an R 'object' containing information about the
+            # regression of y on x
+abline(fit) # plot points and fitted regression line
+anova(fit)  # statistical summary of linear regression
+```
+
+Write your own functions
+
+```{r}
+hello <- function(who) {
+    paste("hello", who, "with", nchar(who), "letters in your name")
+}
+hello("Martin")
+```
+
+Iterate, usually with `lapply()` although `for()` is
+available
+
+```{r}
+names <- c("Martin", "Thomas")
+lapply(names, hello)
+```
+
+# Packages
+
+Extend functionality of base _R_. Can be part of the 'base' distribution...
+
+```{r}
+df <- data.frame(
+    x = rnorm(100),
+    y = x + rnorm(100)
+)
+```
+
+... or a package contributed by users to the Comprehensive R Archive
+Network ([CRAN][]), or to [Bioconductor][] or other repositories. A
+particularly common suite of packages is the 'tidyverse'.  To use the
+[dplyr][] contributed CRAN package, load the package
+
+```{r, message = FALSE}
+library(dplyr)
+```
+
+A dplyr 'tibble' is like a 'data.frame', but more user-friendly
+
+```{r}
+tbl <- tibble(
+    x = rnorm(100),
+    y = x + rnorm(100)
+)
+
+tbl # e.g., only displays the first 10 rows
+```
+
+The tidyverse makes use of 'pipes' `|>` (the older syntax is `%>%`). A
+pipe takes the left-hand side and pass through to the right-hand
+side. Key [dplyr][] 'verbs' can be piped together
+
+- `tibble()` -- representation of a `data.frame`, with better display
+  of long and wide data frames. `tribble()` constructs a tibble in a
+  way that makes the relationship between data across rows more
+  transparent.
+- `glimpse()` -- providing a quick look into the columns and data in
+  the tibble by transposing the tibble and display each 'column' on a
+  single line.
+- `select()` -- column selection.
+- `filter()`, `slice()` -- row selection.
+- `pull()` -- extract a single column as a vector.
+- `mutate()` -- column transformation.
+- `count()` -- count occurences in one or more columns.
+- `arrange()` -- order rows by values in one or more columns.
+- `distinct()` -- reduce a tibble to only unique rows.
+- `group_by()` -- perform computations on groups defined by one or
+  several columns.
+- `summarize()` -- calculate summary statstics for groups.
+- `left_join()`, `right_join()`, `inner_join()` -- merge two tibbles
+  based on shared columns, preserving all rows in the first
+  (`left_join()`) or second (`right_join()`) or both (`inner_join()`)
+  tibble.
+
+```{r}
+tbl |>
+    ## e.g., just rows with non-negative values of x and y
+    filter(x > 0, y > 0) |>
+    ## add a column
+    mutate(distance_from_origin = sqrt(x^2 + y^2))
+```
+
+A 'classic' built-in data set -- Motor Trend 'cars' from
+1974... 'tidyverse' eschews rownames, so make these a column. Use
+`group_by()` to summarize by group (`cyl`). `n()` is a function from
+dplyr that returns the number of records in a group.
+
+```{r}
+mtcars_tbl <-
+    mtcars |>
+    as_tibble(rownames = "model") |>
+    mutate(cyl = factor(cyl))
+mtcars_tbl
+
+mtcars_tbl |>
+    group_by(cyl) |>
+    summarize(
+        n = n(),
+        mean_mpg = mean(mpg, na.rm = TRUE),
+        var_mpg = var(mpg, na.rm = TRUE)
+    )
+```
+
+## Visualization
+
+Let's return to a basic tibble
+
+```{r}
+tbl <- tibble(
+    x = rnorm(100),
+    y = x + rnorm(100)
+)
+```
+
+Use the contributed package [ggplot2][] for visualization.
+
+```{r, message = FALSE}
+library(ggplot2)
+ggplot(tbl) +
+    aes(x, y) +                # use 'x' and 'y' columns for plotting...
+    geom_point() +             # ...plot points...
+    geom_smooth(method = "lm") # ...linear regresion
+```
+
+Check out [plotly][], especially for interactive visualization (e.g.,
+'tooltips' when mousing over points, or dragging to subset and zoom
+in)
+
+```{r, message = FALSE}
+library(plotly)
+plt <-
+    ggplot(mtcars_tbl) +
+    aes(x = cyl, y = mpg, text = model) +
+    geom_jitter(width = .25) +
+    geom_boxplot()
+ggplotly(plt)
+```
+
+## Where do Packages Come From?
+
+- [CRAN][]: *C*omprehensive *R* *A*rchive *N*etwork. More than 18,000
+  packages. Some help from [CRAN Task Views][] in identifying relevant
+  packages.
+
+- [Bioconductor][]: More than 2100 packages relevant to
+  high-throughput genomic analysis. _Vignettes_ are an important part
+  of _Bioconductor_ packages.
+  
+Install packages once per _R_ installation, using
+`BiocManager::install(<package-name>)` (CRAN or Bioconductor)
+
+What about GitHub? Packages haven't been checked by a formal system,
+so may have incomplete code, documentation, dependencies on other
+packages, etc. Authors may not yet be committed to long-term
+maintenance of their package.
+
+[CRAN]: https://cran.r-project.org/web/packages/available_packages_by_name.html
+[CRAN Task Views]: https://cran.r-project.org/web/views/
+[Bioconductor]: https://bioconductor.org/packages
+[dplyr]: https://cran.r-project.org/package=dplyr
+[ggplot2]: https://cran.r-project.org/package=ggplot2
+[plotly]: https://cran.r-project.org/package=plotly
+
+## Help & Vignettes
+
+1. Help pages, e.g., `?lm`
+
+2. Vignettes, e.g., 
+
+    ```{r, eval = FALSE}
+    vignette(package = "ggplot2")
+    vignette("ggplot2-specs", "ggplot2")
+    ```
+
+3. Google, StackOverflow, etc...
+
+## Survival analysis
 
 # Summary
 
 ## Session information
 
-This document was produced with the following *R* software:
+This document was produced with the following _R_ software:
 
 ```{r session_info}
 sessionInfo()

@@ -1,6 +1,6 @@
 Package: ArtNET2023
 Title: R / Bioconductor Workshop for ArtNET 2023 Annual Meeting
-Version: 0.0.0.2
+Version: 0.0.0.3
 Authors@R: 
     c(person(
         "Martin", "Morgan",

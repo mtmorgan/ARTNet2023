@@ -17,7 +17,7 @@ statistical analysis (e.g., simple survivorship). Participants with
 some exposure to R and RStudio will be well-positioned to benefit from
 this workshop.
 
-The workshop consists of 3 short chapters:
+The workshop consists of 3 short articles:
 
 - [Introduction to _R_][A] -- _R_ vectors, data.frames, and packages
   for data management and visualization. Kaplan-Meier curves.
