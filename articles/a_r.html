@@ -169,7 +169,7 @@ columns</li>
 <p>Functions</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>        <span class="co"># 5 random normal deviates</span></span>
-<span><span class="co">#&gt; [1]  0.7792484 -1.1957363  0.9642960 -0.8947239 -0.1341458</span></span>
+<span><span class="co">#&gt; [1] -0.24467398  0.03088212 -0.02108385 -0.30971223 -1.43242561</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span> <span class="co"># 100 random normal deviates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>         <span class="co"># histogram, approximately normal</span></span></code></pre></div>
 <p><img src="a_r_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
@@ -189,7 +189,7 @@ explicit ‘for’ loop</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt; (Intercept)            x  </span></span>
-<span><span class="co">#&gt;     0.05219      1.11691</span></span>
+<span><span class="co">#&gt;    0.001288     1.166785</span></span>
 <span>            <span class="co"># regression of y on x</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="co"># plot points and fitted regression line</span></span></code></pre></div>
 <p><img src="a_r_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
@@ -199,8 +199,8 @@ explicit ‘for’ loop</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Response: y</span></span>
 <span><span class="co">#&gt;           Df Sum Sq Mean Sq F value    Pr(&gt;F)    </span></span>
-<span><span class="co">#&gt; x          1 133.11 133.106  115.62 &lt; 2.2e-16 ***</span></span>
-<span><span class="co">#&gt; Residuals 98 112.82   1.151                      </span></span>
+<span><span class="co">#&gt; x          1 146.80 146.797  147.38 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; Residuals 98  97.61   0.996                      </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 <p>Write your own functions</p>
@@ -248,18 +248,18 @@ CRAN package, load the package</p>
 <span></span>
 <span><span class="va">tbl</span> <span class="co"># e.g., only displays the first 10 rows</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 100 × 2</span></span></span>
-<span><span class="co">#&gt;          x      y</span></span>
-<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  0.889   0.651</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> -<span style="color: #BB0000;">0.075</span><span style="color: #BB0000; text-decoration: underline;">3</span>  0.162</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>  1.50    0.272</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>  1.62    1.03 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> -<span style="color: #BB0000;">0.529</span>  -<span style="color: #BB0000;">0.497</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">0.072</span><span style="color: #BB0000; text-decoration: underline;">2</span> -<span style="color: #BB0000;">0.849</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> -<span style="color: #BB0000;">1.52</span>   -<span style="color: #BB0000;">0.599</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  0.332  -<span style="color: #BB0000;">0.438</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> -<span style="color: #BB0000;">1.97</span>   -<span style="color: #BB0000;">1.09</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  0.401   0.315</span></span>
+<span><span class="co">#&gt;         x      y</span></span>
+<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  0.939  0.761</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> -<span style="color: #BB0000;">1.04</span>  -<span style="color: #BB0000;">0.178</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> -<span style="color: #BB0000;">1.09</span>   0.895</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> -<span style="color: #BB0000;">0.690</span> -<span style="color: #BB0000;">1.28</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>  0.721 -<span style="color: #BB0000;">0.197</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> -<span style="color: #BB0000;">0.480</span> -<span style="color: #BB0000;">2.08</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>  0.797  1.53 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> -<span style="color: #BB0000;">0.322</span> -<span style="color: #BB0000;">0.389</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  0.801 -<span style="color: #BB0000;">0.759</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> -<span style="color: #BB0000;">0.204</span> -<span style="color: #BB0000;">1.18</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 90 more rows</span></span></span></code></pre></div>
 <p>The tidyverse makes use of ‘pipes’ <code>|&gt;</code> (the older
 syntax is <code>%&gt;%</code>). A pipe takes the left-hand side and pass
@@ -309,20 +309,20 @@ tibble.</li>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="va">y</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="co">## add a column</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>distance_from_origin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="va">y</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 44 × 3</span></span></span>
-<span><span class="co">#&gt;         x       y distance_from_origin</span></span>
-<span><span class="co">#&gt;     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 0.889  0.651                  1.10 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 1.50   0.272                  1.52 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 1.62   1.03                   1.92 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 0.401  0.315                  0.510</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 1.11   0.719                  1.32 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.054<span style="text-decoration: underline;">2</span> 0.101                  0.115</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 0.402  0.150                  0.429</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 0.614  0.560                  0.831</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.246  1.31                   1.33 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.738  0.001<span style="text-decoration: underline;">36</span>                0.738</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 34 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 35 × 3</span></span></span>
+<span><span class="co">#&gt;        x     y distance_from_origin</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 0.939 0.761                1.21 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 0.797 1.53                 1.72 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 1.57  1.67                 2.29 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 0.746 0.264                0.791</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 0.769 0.469                0.901</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 0.164 1.30                 1.31 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 1.68  0.789                1.86 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 0.388 0.815                0.903</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 0.266 1.27                 1.30 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0.897 0.994                1.34 </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 25 more rows</span></span></span></code></pre></div>
 <p>A ‘classic’ built-in data set – Motor Trend ‘cars’ from 1974…
 ‘tidyverse’ eschews rownames, so make these a column. Use
 <code><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by()</a></code> to summarize by group (<code>cyl</code>).
@@ -391,8 +391,8 @@ points, or dragging to subset and zoom in)</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html" class="external-link">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/plotly/man/ggplotly.html" class="external-link">ggplotly</a></span><span class="op">(</span><span class="va">plt</span><span class="op">)</span></span></code></pre></div>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2898f552883a4b629c9b" style="width:700px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-2898f552883a4b629c9b">{"x":{"data":[{"x":[2.1956576404627413,1.9929327133577317,1.1514438561862335,1.8219834284391254,2.9138818189967424,2.206207231618464,2.9864502527052537,1.1731468822108582,0.84032799967098981,2.217991930898279,2.0204147193580866,2.8037744362372905,3.0633531112689525,3.0492010718444362,2.7737104370025918,2.9007849445333704,2.7504243809962645,1.1592051804764196,0.76005472103133798,1.1159701409051195,0.84394322731532156,3.2011064034886658,3.2128942363196984,3.1110571364406496,3.1182123750913888,0.78171508607920259,0.9589352619368583,1.0806569763226435,3.0430895240278915,1.9913993151858449,3.0965280308155343,1.0430394960567355],"y":[20.965565768722445,21.010963339097799,22.789397772755475,21.43058168986812,18.675006215125322,18.116619348581882,14.310995879042894,24.408481944985688,22.820941530540587,19.184151478186248,17.822997998353095,16.43397197170183,17.319669128265232,15.237512325644493,10.375736472271383,10.405228023231031,14.707303703278303,32.386314087100324,30.393548131026325,33.933059390056876,21.518943706024437,15.524511504285037,15.187964557297526,13.267972156163305,19.216416709329934,27.267468387726694,26.038153050653637,30.378151813764124,15.803299615420402,19.692310423552989,15.006791803725063,21.43605909684673],"text":["cyl: 6<br />mpg: 21.0<br />Mazda RX4","cyl: 6<br />mpg: 21.0<br />Mazda RX4 Wag","cyl: 4<br />mpg: 22.8<br />Datsun 710","cyl: 6<br />mpg: 21.4<br />Hornet 4 Drive","cyl: 8<br />mpg: 18.7<br />Hornet Sportabout","cyl: 6<br />mpg: 18.1<br />Valiant","cyl: 8<br />mpg: 14.3<br />Duster 360","cyl: 4<br />mpg: 24.4<br />Merc 240D","cyl: 4<br />mpg: 22.8<br />Merc 230","cyl: 6<br />mpg: 19.2<br />Merc 280","cyl: 6<br />mpg: 17.8<br />Merc 280C","cyl: 8<br />mpg: 16.4<br />Merc 450SE","cyl: 8<br />mpg: 17.3<br />Merc 450SL","cyl: 8<br />mpg: 15.2<br />Merc 450SLC","cyl: 8<br />mpg: 10.4<br />Cadillac Fleetwood","cyl: 8<br />mpg: 10.4<br />Lincoln Continental","cyl: 8<br />mpg: 14.7<br />Chrysler Imperial","cyl: 4<br />mpg: 32.4<br />Fiat 128","cyl: 4<br />mpg: 30.4<br />Honda Civic","cyl: 4<br />mpg: 33.9<br />Toyota Corolla","cyl: 4<br />mpg: 21.5<br />Toyota Corona","cyl: 8<br />mpg: 15.5<br />Dodge Challenger","cyl: 8<br />mpg: 15.2<br />AMC Javelin","cyl: 8<br />mpg: 13.3<br />Camaro Z28","cyl: 8<br />mpg: 19.2<br />Pontiac Firebird","cyl: 4<br />mpg: 27.3<br />Fiat X1-9","cyl: 4<br />mpg: 26.0<br />Porsche 914-2","cyl: 4<br />mpg: 30.4<br />Lotus Europa","cyl: 8<br />mpg: 15.8<br />Ford Pantera L","cyl: 6<br />mpg: 19.7<br />Ferrari Dino","cyl: 8<br />mpg: 15.0<br />Maserati Bora","cyl: 4<br />mpg: 21.4<br />Volvo 142E"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2,2,1,2,3,2,3,1,1,2,2,3,3,3,3,3,3,1,1,1,1,3,3,3,3,1,1,1,3,2,3,1],"y":[21,21,22.800000000000001,21.399999999999999,18.699999999999999,18.100000000000001,14.300000000000001,24.399999999999999,22.800000000000001,19.199999999999999,17.800000000000001,16.399999999999999,17.300000000000001,15.199999999999999,10.4,10.4,14.699999999999999,32.399999999999999,30.399999999999999,33.899999999999999,21.5,15.5,15.199999999999999,13.300000000000001,19.199999999999999,27.300000000000001,26,30.399999999999999,15.800000000000001,19.699999999999999,15,21.399999999999999],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,255,255,1)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":27.824636418824401,"r":7.3059360730593621,"b":41.778974318367787,"l":37.260273972602747},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,3.6000000000000001],"tickmode":"array","ticktext":["4","6","8"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["4","6","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"cyl","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[9.1978703263821089,35.110925535946151],"tickmode":"array","ticktext":["10","15","20","25","30","35"],"tickvals":[10,15,20,25,30,35],"categoryorder":"array","categoryarray":["10","15","20","25","30","35"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"mpg","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"7104091c482":{"x":{},"y":{},"text":{},"type":"scatter"},"71016dff523":{"x":{},"y":{},"text":{}}},"cur_data":"7104091c482","visdat":{"7104091c482":["function (y) ","x"],"71016dff523":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-35dadba49d92512a8153" style="width:700px;height:432.632880098888px;"></div>
+<script type="application/json" data-for="htmlwidget-35dadba49d92512a8153">{"x":{"data":[{"x":[2.138037059805356,2.0511229396797717,0.76048473443370312,1.9067124669672921,2.9393866645405069,1.7643262102501467,2.9583467253251001,1.1736917353700846,1.23622616159264,1.8727559162070975,1.922439930960536,3.2110200126189739,2.9359124900074676,3.1851566577097401,3.2386665748199448,3.1411115328082815,3.2171116487588733,1.1635948737384751,0.96984548296313733,1.1534362417878583,0.97617716633249074,3.00233421579469,2.8491531212348491,3.1327720943372697,3.2396950273541734,1.0949499655980617,1.1773146712221205,0.93199932889547199,2.9618355331476778,1.7803342157276347,3.0893412146251649,0.76072247582487762],"y":[21.024647741224616,21.021948779597878,22.763922350332141,21.398783827703443,18.726425807941705,18.10155126590282,14.303612651806326,24.439277203623206,22.77487199559808,19.223508803602307,17.774844039846212,16.390003186762332,17.310036185514182,15.184881491307168,10.416743359100074,10.361961787100881,14.663864192813634,32.38514803543687,30.387494206596163,33.884331886265429,21.536675003003328,15.483248222712428,15.208339595589786,13.292419253140688,19.186580522060392,27.326191682424398,26.008318181578069,30.36593226548284,15.825641874801368,19.701992471497505,15.018253629207612,21.387018956821411],"text":["cyl: 6<br />mpg: 21.0<br />Mazda RX4","cyl: 6<br />mpg: 21.0<br />Mazda RX4 Wag","cyl: 4<br />mpg: 22.8<br />Datsun 710","cyl: 6<br />mpg: 21.4<br />Hornet 4 Drive","cyl: 8<br />mpg: 18.7<br />Hornet Sportabout","cyl: 6<br />mpg: 18.1<br />Valiant","cyl: 8<br />mpg: 14.3<br />Duster 360","cyl: 4<br />mpg: 24.4<br />Merc 240D","cyl: 4<br />mpg: 22.8<br />Merc 230","cyl: 6<br />mpg: 19.2<br />Merc 280","cyl: 6<br />mpg: 17.8<br />Merc 280C","cyl: 8<br />mpg: 16.4<br />Merc 450SE","cyl: 8<br />mpg: 17.3<br />Merc 450SL","cyl: 8<br />mpg: 15.2<br />Merc 450SLC","cyl: 8<br />mpg: 10.4<br />Cadillac Fleetwood","cyl: 8<br />mpg: 10.4<br />Lincoln Continental","cyl: 8<br />mpg: 14.7<br />Chrysler Imperial","cyl: 4<br />mpg: 32.4<br />Fiat 128","cyl: 4<br />mpg: 30.4<br />Honda Civic","cyl: 4<br />mpg: 33.9<br />Toyota Corolla","cyl: 4<br />mpg: 21.5<br />Toyota Corona","cyl: 8<br />mpg: 15.5<br />Dodge Challenger","cyl: 8<br />mpg: 15.2<br />AMC Javelin","cyl: 8<br />mpg: 13.3<br />Camaro Z28","cyl: 8<br />mpg: 19.2<br />Pontiac Firebird","cyl: 4<br />mpg: 27.3<br />Fiat X1-9","cyl: 4<br />mpg: 26.0<br />Porsche 914-2","cyl: 4<br />mpg: 30.4<br />Lotus Europa","cyl: 8<br />mpg: 15.8<br />Ford Pantera L","cyl: 6<br />mpg: 19.7<br />Ferrari Dino","cyl: 8<br />mpg: 15.0<br />Maserati Bora","cyl: 4<br />mpg: 21.4<br />Volvo 142E"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2,2,1,2,3,2,3,1,1,2,2,3,3,3,3,3,3,1,1,1,1,3,3,3,3,1,1,1,3,2,3,1],"y":[21,21,22.800000000000001,21.399999999999999,18.699999999999999,18.100000000000001,14.300000000000001,24.399999999999999,22.800000000000001,19.199999999999999,17.800000000000001,16.399999999999999,17.300000000000001,15.199999999999999,10.4,10.4,14.699999999999999,32.399999999999999,30.399999999999999,33.899999999999999,21.5,15.5,15.199999999999999,13.300000000000001,19.199999999999999,27.300000000000001,26,30.399999999999999,15.800000000000001,19.699999999999999,15,21.399999999999999],"hoverinfo":"y","type":"box","fillcolor":"rgba(255,255,255,1)","marker":{"opacity":null,"outliercolor":"rgba(0,0,0,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"},"size":5.6692913385826778},"line":{"color":"rgba(51,51,51,1)","width":1.8897637795275593},"showlegend":false,"xaxis":"x","yaxis":"y","frame":null}],"layout":{"margin":{"t":27.824636418824401,"r":7.3059360730593621,"b":41.778974318367787,"l":37.260273972602747},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,3.6000000000000001],"tickmode":"array","ticktext":["4","6","8"],"tickvals":[1,2,3],"categoryorder":"array","categoryarray":["4","6","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"cyl","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[9.1850598764559255,35.076901910644956],"tickmode":"array","ticktext":["10","15","20","25","30","35"],"tickvals":[10,15,20,25,30,35],"categoryorder":"array","categoryarray":["10","15","20","25","30","35"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"mpg","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"6803c44be89":{"x":{},"y":{},"text":{},"type":"scatter"},"680676a4352":{"x":{},"y":{},"text":{}}},"cur_data":"6803c44be89","visdat":{"6803c44be89":["function (y) ","x"],"680676a4352":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="where-do-packages-come-from">Where do Packages Come From?<a class="anchor" aria-label="anchor" href="#where-do-packages-come-from"></a>
@@ -480,8 +480,8 @@ for details.</p>
 <p>Columns in the datasset are described as:</p>
 <ul>
 <li>trt: 1=standard, 2=test</li>
-<li>celltype: 1=squamous, 2=smallcell, 3=adeno, 4=large</li>
-<li>time: survival time</li>
+<li>celltype: squamous, smallcell, adeno, large</li>
+<li>time: survival time (months?)</li>
 <li>status: censoring status</li>
 <li>karno: Karnofsky performance score (100=good)</li>
 <li>diagtime: months from diagnosis to randomisation</li>
@@ -492,7 +492,7 @@ for details.</p>
 e.g.,</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">veteran</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">celltype</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">celltype</span>, <span class="va">trt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">trt</span>, values_from <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">#&gt;   celltype    `1`   `2`</span></span>
@@ -501,19 +501,44 @@ e.g.,</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> large        15    12</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> smallcell    30    18</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> squamous     15    20</span></span></code></pre></div>
+<p>For continuous variables like <code>age</code>, it may be useful to
+stratify the data, e.g., separating individuals as less than 60
+(<code>LT60</code>), or greater than or equal to 60 (<code>GE60</code>).
+For <code>trt</code>, the encoding is a <code>double</code>, but it
+makes more sense for this to be a categorical variable</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">veteran</span> <span class="op">&lt;-</span></span>
+<span>    <span class="va">veteran</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>        age_group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="op">(</span><span class="va">age</span> <span class="op">&lt;</span> <span class="fl">60</span><span class="op">)</span>, <span class="st">"LT60"</span>, <span class="st">"GE60"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        trt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">trt</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"treatment"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span></code></pre></div>
+<p>The <code>celltype</code> and <code>trt</code> summary table is more
+informative</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">veteran</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">celltype</span>, <span class="va">trt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">trt</span>, values_from <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
+<span><span class="co">#&gt;   celltype  control treatment</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adeno           9        18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> large          15        12</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> smallcell      30        18</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> squamous       15        20</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="kaplan-meier-curve-for-the-entire-data">Kaplan-Meier curve for the entire data<a class="anchor" aria-label="anchor" href="#kaplan-meier-curve-for-the-entire-data"></a>
 </h3>
 <p>Fit a standard survival model to the entire dataset</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">km</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>, <span class="va">veteran</span><span class="op">)</span></span></code></pre></div>
 <p>It is useful to know the ‘class’ of <code>km</code></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "survfit"</span></span></code></pre></div>
 <p>And to get a summary of the data after different lengths of time…</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">km</span>, times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">30</span>, <span class="fl">60</span>, <span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">360</span>, <span class="fl">720</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call: survfit(formula = Surv(time, status) ~ 1, data = veteran)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -528,32 +553,22 @@ e.g.,</p>
 <p>… but nothing communicates like a figure (for help with the
 <code>autoplot</code> function applied to <code>survfit</code> object,
 see <code><a href="https://rdrr.io/pkg/ggfortify/man/autoplot.survfit.html" class="external-link">?autoplot.survfit</a></code>).</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a_r_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<p><img src="a_r_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="kaplan-meier-curve-stratified-by-treatment-or-age-group">Kaplan-Meier curve stratified by treatment or age group<a class="anchor" aria-label="anchor" href="#kaplan-meier-curve-stratified-by-treatment-or-age-group"></a>
 </h3>
 <p>It is easy to fit Kaplan-Meier curves to groups, e.g,. treatment</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">km_trt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span>, data<span class="op">=</span><span class="va">veteran</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">km_trt</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a_r_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
-<p>For continuous variables like <code>age</code>, it may be useful to
-stratify the data, e.g., separating individuals as less than 60
-(<code>LT60</code>), or greater than or equal to 60
-(<code>GE60</code>).</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">veteran</span> <span class="op">&lt;-</span></span>
-<span>    <span class="va">veteran</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>        age_group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="op">(</span><span class="va">age</span> <span class="op">&lt;</span> <span class="fl">60</span><span class="op">)</span>, <span class="st">"LT60"</span>, <span class="st">"GE60"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    <span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<p><img src="a_r_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">km_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">age_group</span>, <span class="va">veteran</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">km_age</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a_r_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p><img src="a_r_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="cox-proportional-hazards-model">Cox proportional hazards model<a class="anchor" aria-label="anchor" href="#cox-proportional-hazards-model"></a>
@@ -564,7 +579,7 @@ hazards model as a basis for statical understand. In the summary table,
 <code>trttest</code> indicates that the summary reports the effect of
 <code>test</code> compared to <code>standard</code> as the base
 line.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">veteran</span></span>
@@ -575,11 +590,11 @@ line.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   n= 137, number of events= 128 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        coef exp(coef) se(coef)     z Pr(&gt;|z|)</span></span>
-<span><span class="co">#&gt; trt 0.01774   1.01790  0.18066 0.098    0.922</span></span>
+<span><span class="co">#&gt;                 coef exp(coef) se(coef)     z Pr(&gt;|z|)</span></span>
+<span><span class="co">#&gt; trttreatment 0.01774   1.01790  0.18066 0.098    0.922</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span><span class="co">#&gt; trt     1.018     0.9824    0.7144      1.45</span></span>
+<span><span class="co">#&gt;              exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span><span class="co">#&gt; trttreatment     1.018     0.9824    0.7144      1.45</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Concordance= 0.525  (se = 0.026 )</span></span>
 <span><span class="co">#&gt; Likelihood ratio test= 0.01  on 1 df,   p=0.9</span></span>
@@ -589,7 +604,7 @@ line.</p>
 <code>age</code> is a statistically meaningful contribution to survival,
 although interpretation even of this ‘simple’ model should probably be
 discussed with a statistician.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">trt</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">veteran</span></span>
@@ -600,13 +615,13 @@ discussed with a statistician.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   n= 137, number of events= 128 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;          coef exp(coef)  se(coef)      z Pr(&gt;|z|)</span></span>
-<span><span class="co">#&gt; age  0.007527  1.007556  0.009661  0.779    0.436</span></span>
-<span><span class="co">#&gt; trt -0.003654  0.996352  0.182514 -0.020    0.984</span></span>
+<span><span class="co">#&gt;                   coef exp(coef)  se(coef)      z Pr(&gt;|z|)</span></span>
+<span><span class="co">#&gt; age           0.007527  1.007556  0.009661  0.779    0.436</span></span>
+<span><span class="co">#&gt; trttreatment -0.003654  0.996352  0.182514 -0.020    0.984</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span><span class="co">#&gt; age    1.0076     0.9925    0.9887     1.027</span></span>
-<span><span class="co">#&gt; trt    0.9964     1.0037    0.6967     1.425</span></span>
+<span><span class="co">#&gt;              exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span><span class="co">#&gt; age             1.0076     0.9925    0.9887     1.027</span></span>
+<span><span class="co">#&gt; trttreatment    0.9964     1.0037    0.6967     1.425</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Concordance= 0.514  (se = 0.029 )</span></span>
 <span><span class="co">#&gt; Likelihood ratio test= 0.63  on 2 df,   p=0.7</span></span>
@@ -622,7 +637,7 @@ discussed with a statistician.</p>
 </h3>
 <p>This document was produced with the following <em>R</em>
 software:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.3.0 (2023-04-21)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
