@@ -1,8 +1,8 @@
 # R / Bioconductor Workshop for ArtNET 2023 Annual Meeting
 
-This document is located at https://mtmorgan.github.io/ArtNET2023
+## https://mtmorgan.github.io/ArtNET2023
 
-<!-- ![](man/figures/bit.ly_3p1SE4J.jpeg){width=200px} -->
+![](man/figures/bit.ly_468FFyO.jpeg){width=200px}
 
 This resource contains material presented at the ArtNET2023 Annual
 Meeting, June, 2023 in Buffalo, New York.
