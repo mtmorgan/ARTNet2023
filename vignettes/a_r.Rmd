@@ -73,7 +73,7 @@ df <- data.frame(
 df
 ```
 
-Key opererations on `data.frame`
+Key operations on `data.frame`
 
 - `df[1:3, c("gender", "age")]` -- subset on rows and columns
 - `df[["age"]]`, `df$age` -- select columns
@@ -164,12 +164,12 @@ side. Key [dplyr][] 'verbs' can be piped together
 - `filter()`, `slice()` -- row selection.
 - `pull()` -- extract a single column as a vector.
 - `mutate()` -- column transformation.
-- `count()` -- count occurences in one or more columns.
+- `count()` -- count occurrences in one or more columns.
 - `arrange()` -- order rows by values in one or more columns.
 - `distinct()` -- reduce a tibble to only unique rows.
 - `group_by()` -- perform computations on groups defined by one or
   several columns.
-- `summarize()` -- calculate summary statstics for groups.
+- `summarize()` -- calculate summary statistics for groups.
 - `left_join()`, `right_join()`, `inner_join()` -- merge two tibbles
   based on shared columns, preserving all rows in the first
   (`left_join()`) or second (`right_join()`) or both (`inner_join()`)
@@ -277,6 +277,17 @@ maintenance of their package.
 
 3. Google, StackOverflow, etc...
 
+4. ChatGPT -- my three types of experiences
+
+    - an initial implementation that 'works' and returns the correct
+      answer but would not have been the way that I would have written
+      the solution -- OK
+    - a solution that 'works' (does not produce an error) but does the
+      wrong thing -- **VERY BAD**
+    - an 'hallucination' / 'delusion', for instance suggesting that I
+      use the package 'RcppAlgorithm', but no such package exists
+      (although actually it sounded like a good package...)! -- AMUSING
+
 # Survival analysis
 
 These notes are from [Survival Analysis with R][SAR]
@@ -375,12 +386,14 @@ autoplot(km)
 
 ## Kaplan-Meier curve stratified by treatment or age group
 
-It is easy to fit Kaplan-Meier curves to groups, e.g,. treatment
+It is easy to fit Kaplan-Meier curves to groups, e.g,. treatment...
 
 ```{r}
-km_trt <- survfit(Surv(time, status) ~ trt, data=veteran)
+km_trt <- survfit(Surv(time, status) ~ trt, veteran)
 autoplot(km_trt)
 ```
+
+...or age group
 
 ```{r}
 km_age <- survfit(Surv(time, status) ~ age_group, veteran)
@@ -391,15 +404,12 @@ autoplot(km_age)
 
 Kaplan-Meier plots are useful for visualization, but is there
 statistical support for an effect of treatment? Use the Cox
-proportional hazards model as a basis for statical understand. In the
+proportional hazards model as a basis for statistical understand. In the
 summary table, `trttest` indicates that the summary reports the effect
 of `test` compared to `standard` as the base line.
 
 ```{r}
-cox <- coxph(
-    Surv(time, status) ~ trt,
-    data = veteran
-)
+cox <- coxph(Surv(time, status) ~ trt, veteran)
 summary(cox)
 ```
 
@@ -409,10 +419,7 @@ interpretation even of this 'simple' model should probably be
 discussed with a statistician.
 
 ```{r}
-cox <- coxph(
-    Surv(time, status) ~ age + trt,
-    data = veteran
-)
+cox <- coxph(Surv(time, status) ~ age + trt, veteran)
 summary(cox)
 ```
 

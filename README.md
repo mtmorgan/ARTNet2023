@@ -1,6 +1,6 @@
 # R / Bioconductor Workshop for ArtNET 2023 Annual Meeting
 
-## https://mtmorgan.github.io/ArtNET2023
+## https://bit.ly/468FFyO
 
 ![](man/figures/bit.ly_468FFyO.jpeg){width=200px}
 

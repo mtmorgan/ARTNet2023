@@ -1,7 +1,7 @@
 Package: ArtNET2023
 Title: R / Bioconductor Workshop for ArtNET 2023 Annual Meeting
-Version: 0.0.0.3
-Authors@R: 
+Version: 0.0.0.4
+Authors@R:
     c(person(
         "Martin", "Morgan",
         role = c("aut", "cre"),
@@ -25,9 +25,10 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Suggests: 
-    dplyr, ggplot2, plotly, survival, ggfortify, tidyr, readr,
-    Seurat, SingleCellExperiment,
+Suggests:
+    dplyr, ggplot2, survival, ggfortify, tidyr, readr,
+    plotly, SingleCellExperiment, AnnotationHub, ensembldb,
+    Seurat,
     knitr, rmarkdown, pkgdown
 URL: https://mtmorgan.github.io/ArtNET2023/
 BugReports: https://github.com/mtmorgan/ArtNET2023/issues/new/choose
