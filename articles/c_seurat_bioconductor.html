@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ArtNET2023</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.5</span>
       </span>
     </div>
 
@@ -111,8 +111,264 @@ Analysis</h1>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>There are rich, well-documented workflows for single-cell analysis in
+<em>R</em>. We’ll point to these resources and outline overall
+workflows, but will only perform illustrative calculations. Some steps
+require both computing time and resources that aren’t suitable for
+workshop presentation so we focus on a ‘classic’ data set, the 10x
+Genomics Peripheral Blood Mononuclear Cells (PBMC) dataset conssists of
+2,700 cells. Analysis of data sets with say 50,000 cells might require
+32- or 64 GB of memory and take up to an hour for an end-to-end
+analysis; one way to access a computer with the much memory might be
+through a commercial (Google, Azure, AWS) cloud, or on a research
+network like the <a href="https://anvilproject.org" class="external-link">AnVIL</a>
+computational cloud.</p>
+</div>
+<div class="section level2">
+<h2 id="seurat">Seurat<a class="anchor" aria-label="anchor" href="#seurat"></a>
+</h2>
+<p>Based on <a href="https://satijalab.org/seurat" class="external-link">Getting Started with
+Seurat</a> and the <a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html" class="external-link">Seurat
+- Guided Clustering Tutorial</a>. The guided tutorial covers</p>
+<ul>
+<li>Data input</li>
+<li>Quality Control</li>
+<li>Normalization</li>
+<li>Identification of highly variable features</li>
+<li>Scaling the data</li>
+<li>Linear dimensional reduction</li>
+<li>Clusters</li>
+<li>Non-linear dimensional reduction (e.g., UMAP)</li>
+<li>Differential expression</li>
+<li>Cell type assignment</li>
+</ul>
+<p>To illustrating working with <code>Seurat</code>, we take the first
+few steps through this workflow.</p>
+<div class="section level3">
+<h3 id="workflow">Workflow<a class="anchor" aria-label="anchor" href="#workflow"></a>
+</h3>
+<p>Here we re-capitulate some of the initial steps in the <a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html" class="external-link">Seurat
+tutorial</a>.</p>
+<p>Data retrieval. Here we retrieve the raw data to a local cache. It is
+distributed as a compressed ‘tar’ archive, so we <code><a href="https://rdrr.io/r/utils/untar.html" class="external-link">untar()</a></code> it
+to a temporary location.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mtmorgan.github.io/ArtNET2023/">ArtNET2023</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">## download to local cache</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<span>    <span class="st">"https://cf.10xgenomics.com/samples/cell/pbmc3k/"</span>,</span>
+<span>    <span class="st">"pbmc3k_filtered_gene_bc_matrices.tar.gz"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">pbmc3k_tar_gz</span> <span class="op">&lt;-</span> <span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html" class="external-link">bfcrpath</a></span><span class="op">(</span>rname <span class="op">=</span> <span class="va">url</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## 'untar' to a temporary location</span></span>
+<span><span class="va">pbmc3k_directory</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/untar.html" class="external-link">untar</a></span><span class="op">(</span><span class="va">pbmc3k_tar_gz</span>, exdir <span class="op">=</span> <span class="va">pbmc3k_directory</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## location of the relevant data</span></span>
+<span><span class="va">pbmc3k_data_dir</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pbmc3k_directory</span>, <span class="st">"filtered_gene_bc_matrices"</span>, <span class="st">"hg19"</span><span class="op">)</span></span></code></pre></div>
+<p>Following the <a href="https://satijalab.org/seurat/articles/pbmc3k_tutorial.html" class="external-link">Seurat
+tutorial</a>, we read the data into a sparse matrix, and then into a
+Seurat object.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
+<span><span class="co">#&gt; will retire shortly. Please refer to R-spatial evolution reports on</span></span>
+<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
+<span><span class="co">#&gt; This package is now running under evolution status 0</span></span>
+<span><span class="co">#&gt; Attaching SeuratObject</span></span>
+<span></span>
+<span><span class="co">## read the 10x data as a sparse matrix</span></span>
+<span><span class="va">pbmc.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/Read10X.html" class="external-link">Read10X</a></span><span class="op">(</span>data.dir <span class="op">=</span> <span class="va">pbmc3k_data_dir</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">pbmc.data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "dgCMatrix"</span></span>
+<span><span class="co">#&gt; attr(,"package")</span></span>
+<span><span class="co">#&gt; [1] "Matrix"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pbmc.data</span><span class="op">)</span> <span class="co"># 32738 features (genes) x 2700 samples (cells)</span></span>
+<span><span class="co">#&gt; [1] 32738  2700</span></span>
+<span></span>
+<span><span class="co">## create a Seurat object from the count matrix</span></span>
+<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/CreateSeuratObject.html" class="external-link">CreateSeuratObject</a></span><span class="op">(</span></span>
+<span>    counts <span class="op">=</span> <span class="va">pbmc.data</span>,</span>
+<span>    project <span class="op">=</span> <span class="st">"pbmc3k"</span>,</span>
+<span>    <span class="co">## filter some features (present in less than 3 cells) and cells</span></span>
+<span>    <span class="co">## (fewer than 200 features)</span></span>
+<span>    min.cells <span class="op">=</span> <span class="fl">3</span>, min.features <span class="op">=</span> <span class="fl">200</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Feature names cannot have underscores ('_'), replacing with dashes</span></span>
+<span><span class="co">#&gt; ('-')</span></span>
+<span></span>
+<span><span class="va">pbmc</span> <span class="co"># 13714 features x 2700 samples</span></span>
+<span><span class="co">#&gt; An object of class Seurat </span></span>
+<span><span class="co">#&gt; 13714 features across 2700 samples within 1 assay </span></span>
+<span><span class="co">#&gt; Active assay: RNA (13714 features, 0 variable features)</span></span>
+<span></span>
+<span><span class="va">pbmc</span><span class="op">[[</span><span class="st">"RNA"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Assay data with 13714 features for 2700 cells</span></span>
+<span><span class="co">#&gt; First 10 features:</span></span>
+<span><span class="co">#&gt;  AL627309.1, AP006222.2, RP11-206L10.2, RP11-206L10.9, LINC00115, NOC2L,</span></span>
+<span><span class="co">#&gt; KLHL17, PLEKHN1, RP11-54O7.17, HES4</span></span></code></pre></div>
+<p>The first step in the workflow is to perform quality control. Start
+by identifying the mitochondrial genes. In this particular example,
+mitchondrial genes are annotated based on the feature name.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## The [[ operator can add columns to object metadata. This is a great</span></span>
+<span><span class="co">## place to stash QC stats</span></span>
+<span><span class="va">pbmc</span><span class="op">[[</span><span class="st">"percent.mt"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/PercentageFeatureSet.html" class="external-link">PercentageFeatureSet</a></span><span class="op">(</span><span class="va">pbmc</span>, pattern <span class="op">=</span> <span class="st">"^MT-"</span><span class="op">)</span></span></code></pre></div>
+<p>Visualize some metrics…</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://satijalab.org/seurat/reference/VlnPlot.html" class="external-link">VlnPlot</a></span><span class="op">(</span></span>
+<span>    <span class="va">pbmc</span>,</span>
+<span>    features <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nFeature_RNA"</span>, <span class="st">"nCount_RNA"</span>, <span class="st">"percent.mt"</span><span class="op">)</span>,</span>
+<span>    ncol <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="c_seurat_bioconductor_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>…and use <em>ad hoc</em> criteria to filter features;
+<code><a href="https://rdrr.io/pkg/BiocGenerics/man/subset.html" class="external-link">subset()</a></code> is a base <em>R</em> function.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/subset.html" class="external-link">subset</a></span><span class="op">(</span></span>
+<span>    <span class="va">pbmc</span>,</span>
+<span>    subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">200</span> <span class="op">&amp;</span> <span class="va">nFeature_RNA</span> <span class="op">&lt;</span> <span class="fl">2500</span> <span class="op">&amp;</span> <span class="va">percent.mt</span> <span class="op">&lt;</span> <span class="fl">5</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pbmc</span></span>
+<span><span class="co">#&gt; An object of class Seurat </span></span>
+<span><span class="co">#&gt; 13714 features across 2638 samples within 1 assay </span></span>
+<span><span class="co">#&gt; Active assay: RNA (13714 features, 0 variable features)</span></span></code></pre></div>
+<p>The workflow continues from here…</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="bioconductor">Bioconductor<a class="anchor" aria-label="anchor" href="#bioconductor"></a>
+</h2>
+<p>The following is based on <a href="http://bioconductor.org/books/release/OSCA.basic/" class="external-link">Orchestrating
+Single-Cell Analysis with Bioconductor</a>. This resource is separated
+into introductory, basic, advanced, and multi-sample sections, with a
+collection of workflows illustrating use. A good place to start is with
+a workflow to get a feel for data analysis, and then to refer back to
+earlier sections for more detailed operations or understanding.</p>
+<p>We’ll follow the <a href="https://bioconductor.org/books/release/OSCA.workflows/unfiltered-human-pbmcs-10x-genomics.html" class="external-link">Unfiltered
+human PBMCs</a> workflow for another PBMC data, but use the same dataset
+as in the Seurat section earlier in this article.</p>
+<div class="section level3">
+<h3 id="workflow-1">Workflow<a class="anchor" aria-label="anchor" href="#workflow-1"></a>
+</h3>
+<p>Data retrieval is a outlined above. After <code><a href="https://rdrr.io/r/utils/untar.html" class="external-link">untar()</a></code>ing the
+data <code>pbmc3k_data_dir</code> is the location to use for data
+input.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">DropletUtils</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scuttle</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc3k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DropletUtils/man/read10xCounts.html" class="external-link">read10xCounts</a></span><span class="op">(</span><span class="va">pbmc3k_data_dir</span>, col.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pbmc3k</span></span>
+<span><span class="co">#&gt; class: SingleCellExperiment </span></span>
+<span><span class="co">#&gt; dim: 32738 2700 </span></span>
+<span><span class="co">#&gt; metadata(1): Samples</span></span>
+<span><span class="co">#&gt; assays(1): counts</span></span>
+<span><span class="co">#&gt; rownames(32738): ENSG00000243485 ENSG00000237613 ... ENSG00000215616</span></span>
+<span><span class="co">#&gt;   ENSG00000215611</span></span>
+<span><span class="co">#&gt; rowData names(2): ID Symbol</span></span>
+<span><span class="co">#&gt; colnames(2700): AAACATACAACCAC-1 AAACATTGAGCTAC-1 ... TTTGCATGAGAGGC-1</span></span>
+<span><span class="co">#&gt;   TTTGCATGCCTCAC-1</span></span>
+<span><span class="co">#&gt; colData names(2): Sample Barcode</span></span>
+<span><span class="co">#&gt; reducedDimNames(0):</span></span>
+<span><span class="co">#&gt; mainExpName: NULL</span></span>
+<span><span class="co">#&gt; altExpNames(0):</span></span></code></pre></div>
+<p>Skipping to the quality control step, let’s identify mitochondrial
+genes. In this data set, we can identify the mitochondrial genes by
+looking at the <code>Symbol</code> column of <code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData()</a></code></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/startsWith.html" class="external-link">startsWith</a></span><span class="op">(</span><span class="va">Symbol</span>, <span class="st">"MT-"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 × 2</span></span></span>
+<span><span class="co">#&gt;    ID              Symbol </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> ENSG00000198888 MT-ND1 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> ENSG00000198763 MT-ND2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> ENSG00000198804 MT-CO1 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> ENSG00000198712 MT-CO2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> ENSG00000228253 MT-ATP8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> ENSG00000198899 MT-ATP6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> ENSG00000198938 MT-CO3 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> ENSG00000198840 MT-ND3 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> ENSG00000212907 MT-ND4L</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> ENSG00000198886 MT-ND4 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> ENSG00000198786 MT-ND5 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> ENSG00000198695 MT-ND6 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> ENSG00000198727 MT-CYB</span></span>
+<span></span>
+<span><span class="va">is_mitochondrial</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">pbmc3k</span><span class="op">)</span><span class="op">$</span><span class="va">Symbol</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/startsWith.html" class="external-link">startsWith</a></span><span class="op">(</span><span class="st">"MT-"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/which.html" class="external-link">which</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Calculate per-cell quality control metrics…</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html" class="external-link">perCellQCMetrics</a></span><span class="op">(</span><span class="va">pbmc3k</span>, subsets<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Mito<span class="op">=</span><span class="va">is_mitochondrial</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">stats</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,700 × 6</span></span></span>
+<span><span class="co">#&gt;      sum detected subsets_Mito_sum subsets_Mito_detected subsets_Mito_percent</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">2</span>421      781               73                    10                3.02 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">4</span>903     <span style="text-decoration: underline;">1</span>352              186                    10                3.79 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">3</span>149     <span style="text-decoration: underline;">1</span>131               28                     8                0.889</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">2</span>639      960               46                    10                1.74 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>   981      522               12                     5                1.22 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">2</span>164      782               36                     7                1.66 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">2</span>176      783               83                    10                3.81 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">2</span>260      790               70                     9                3.10 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">1</span>276      533               15                     6                1.18 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">1</span>103      550               32                     7                2.90 </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,690 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: total &lt;dbl&gt;</span></span></span>
+<span></span>
+<span><span class="va">high_mito</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/isOutlier.html" class="external-link">isOutlier</a></span><span class="op">(</span><span class="va">stats</span><span class="op">$</span><span class="va">subsets_Mito_percent</span>, type<span class="op">=</span><span class="st">"higher"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">high_mito</span><span class="op">)</span></span>
+<span><span class="co">#&gt; high_mito</span></span>
+<span><span class="co">#&gt; FALSE  TRUE </span></span>
+<span><span class="co">#&gt;  2607    93</span></span></code></pre></div>
+<p>…and use <code>high_mito</code> to create a subset of the results</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbmc3k</span><span class="op">[</span>, <span class="op">!</span><span class="va">high_mito</span><span class="op">]</span></span>
+<span><span class="co">#&gt; class: SingleCellExperiment </span></span>
+<span><span class="co">#&gt; dim: 32738 2607 </span></span>
+<span><span class="co">#&gt; metadata(1): Samples</span></span>
+<span><span class="co">#&gt; assays(1): counts</span></span>
+<span><span class="co">#&gt; rownames(32738): ENSG00000243485 ENSG00000237613 ... ENSG00000215616</span></span>
+<span><span class="co">#&gt;   ENSG00000215611</span></span>
+<span><span class="co">#&gt; rowData names(2): ID Symbol</span></span>
+<span><span class="co">#&gt; colnames(2607): AAACATACAACCAC-1 AAACATTGAGCTAC-1 ... TTTGCATGAGAGGC-1</span></span>
+<span><span class="co">#&gt;   TTTGCATGCCTCAC-1</span></span>
+<span><span class="co">#&gt; colData names(2): Sample Barcode</span></span>
+<span><span class="co">#&gt; reducedDimNames(0):</span></span>
+<span><span class="co">#&gt; mainExpName: NULL</span></span>
+<span><span class="co">#&gt; altExpNames(0):</span></span></code></pre></div>
+<p>The workflow continues…!</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="brief-commentary">Brief Commentary<a class="anchor" aria-label="anchor" href="#brief-commentary"></a>
+</h2>
+<p>It is worthwhile to compare the <em>Seurat</em> and
+<em>SingleCellExperiment</em> work flows.</p>
+<p>Actually, a first question is ‘why not just have a single function
+that takes the analysis from begining to end?’ Answers might be</p>
+<ol style="list-style-type: decimal">
+<li><p>It is educational to understand the data transformations and
+their assummptions required in an analysis.</p></li>
+<li><p>No two data sets are the same, so at any step some manipulation
+(e.g., to identify mitochondrial genes), choice of algorithm, or
+interpretation of results might be required.</p></li>
+</ol>
+<p>What about the difference between the <em>Seurat</em> and
+<em>Bioconductor</em> workflows? In broad detail the analyses accomplish
+the same ends. <em>Seurat</em> is more standardized and widely used,
+while <em>Bioconductor</em> may be less standardized and more
+flexible.</p>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
@@ -122,7 +378,7 @@ Analysis</h1>
 </h3>
 <p>This document was produced with the following <em>R</em>
 software:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.3.0 (2023-04-21)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
@@ -144,21 +400,96 @@ software:</p>
 <span><span class="co">#&gt; tzcode source: system (glibc)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
-<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; [1] stats4    stats     graphics  grDevices utils     datasets  methods  </span></span>
+<span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ArtNET2023_0.0.0.4</span></span>
+<span><span class="co">#&gt;  [1] scuttle_1.11.0              DropletUtils_1.21.0        </span></span>
+<span><span class="co">#&gt;  [3] SingleCellExperiment_1.23.0 SummarizedExperiment_1.31.1</span></span>
+<span><span class="co">#&gt;  [5] Biobase_2.61.0              GenomicRanges_1.53.1       </span></span>
+<span><span class="co">#&gt;  [7] GenomeInfoDb_1.37.1         IRanges_2.35.1             </span></span>
+<span><span class="co">#&gt;  [9] S4Vectors_0.39.1            BiocGenerics_0.47.0        </span></span>
+<span><span class="co">#&gt; [11] MatrixGenerics_1.13.0       matrixStats_1.0.0          </span></span>
+<span><span class="co">#&gt; [13] SeuratObject_4.1.3          Seurat_4.3.0               </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43        rlang_1.1.1      </span></span>
-<span><span class="co">#&gt;  [5] xfun_0.39         stringi_1.7.12    purrr_1.0.1       textshaping_0.3.6</span></span>
-<span><span class="co">#&gt;  [9] jsonlite_1.8.5    glue_1.6.2        rprojroot_2.0.3   htmltools_0.5.5  </span></span>
-<span><span class="co">#&gt; [13] ragg_1.2.5        sass_0.4.6        rmarkdown_2.22    evaluate_0.21    </span></span>
-<span><span class="co">#&gt; [17] jquerylib_0.1.4   fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.3  </span></span>
-<span><span class="co">#&gt; [21] memoise_2.0.1     stringr_1.5.0     compiler_4.3.0    fs_1.6.2         </span></span>
-<span><span class="co">#&gt; [25] systemfonts_1.0.4 digest_0.6.31     R6_2.5.1          magrittr_2.0.3   </span></span>
-<span><span class="co">#&gt; [29] bslib_0.5.0       tools_4.3.0       pkgdown_2.0.7     cachem_1.0.8     </span></span>
-<span><span class="co">#&gt; [33] desc_1.4.2</span></span></code></pre></div>
+<span><span class="co">#&gt;   [1] RcppAnnoy_0.0.20          splines_4.3.0            </span></span>
+<span><span class="co">#&gt;   [3] later_1.3.1               bitops_1.0-7             </span></span>
+<span><span class="co">#&gt;   [5] filelock_1.0.2            tibble_3.2.1             </span></span>
+<span><span class="co">#&gt;   [7] R.oo_1.25.0               polyclip_1.10-4          </span></span>
+<span><span class="co">#&gt;   [9] lifecycle_1.0.3           edgeR_3.43.4             </span></span>
+<span><span class="co">#&gt;  [11] rprojroot_2.0.3           globals_0.16.2           </span></span>
+<span><span class="co">#&gt;  [13] lattice_0.21-8            MASS_7.3-60              </span></span>
+<span><span class="co">#&gt;  [15] magrittr_2.0.3            limma_3.57.5             </span></span>
+<span><span class="co">#&gt;  [17] plotly_4.10.2             sass_0.4.6               </span></span>
+<span><span class="co">#&gt;  [19] rmarkdown_2.22            jquerylib_0.1.4          </span></span>
+<span><span class="co">#&gt;  [21] yaml_2.3.7                httpuv_1.6.11            </span></span>
+<span><span class="co">#&gt;  [23] sctransform_0.3.5         sp_1.6-1                 </span></span>
+<span><span class="co">#&gt;  [25] spatstat.sparse_3.0-1     reticulate_1.30          </span></span>
+<span><span class="co">#&gt;  [27] cowplot_1.1.1             pbapply_1.7-0            </span></span>
+<span><span class="co">#&gt;  [29] DBI_1.1.3                 RColorBrewer_1.1-3       </span></span>
+<span><span class="co">#&gt;  [31] abind_1.4-5               zlibbioc_1.47.0          </span></span>
+<span><span class="co">#&gt;  [33] Rtsne_0.16                purrr_1.0.1              </span></span>
+<span><span class="co">#&gt;  [35] R.utils_2.12.2            RCurl_1.98-1.12          </span></span>
+<span><span class="co">#&gt;  [37] GenomeInfoDbData_1.2.10   ggrepel_0.9.3            </span></span>
+<span><span class="co">#&gt;  [39] irlba_2.3.5.1             listenv_0.9.0            </span></span>
+<span><span class="co">#&gt;  [41] spatstat.utils_3.0-3      goftest_1.2-3            </span></span>
+<span><span class="co">#&gt;  [43] dqrng_0.3.0               spatstat.random_3.1-5    </span></span>
+<span><span class="co">#&gt;  [45] fitdistrplus_1.1-11       parallelly_1.36.0        </span></span>
+<span><span class="co">#&gt;  [47] pkgdown_2.0.7             DelayedMatrixStats_1.23.0</span></span>
+<span><span class="co">#&gt;  [49] leiden_0.4.3              codetools_0.2-19         </span></span>
+<span><span class="co">#&gt;  [51] DelayedArray_0.27.5       tidyselect_1.2.0         </span></span>
+<span><span class="co">#&gt;  [53] farver_2.1.1              BiocFileCache_2.9.0      </span></span>
+<span><span class="co">#&gt;  [55] spatstat.explore_3.2-1    jsonlite_1.8.5           </span></span>
+<span><span class="co">#&gt;  [57] ellipsis_0.3.2            progressr_0.13.0         </span></span>
+<span><span class="co">#&gt;  [59] ggridges_0.5.4            survival_3.5-5           </span></span>
+<span><span class="co">#&gt;  [61] systemfonts_1.0.4         tools_4.3.0              </span></span>
+<span><span class="co">#&gt;  [63] ragg_1.2.5                ica_1.0-3                </span></span>
+<span><span class="co">#&gt;  [65] Rcpp_1.0.10               glue_1.6.2               </span></span>
+<span><span class="co">#&gt;  [67] gridExtra_2.3             SparseArray_1.1.10       </span></span>
+<span><span class="co">#&gt;  [69] xfun_0.39                 HDF5Array_1.29.3         </span></span>
+<span><span class="co">#&gt;  [71] dplyr_1.1.2               withr_2.5.0              </span></span>
+<span><span class="co">#&gt;  [73] fastmap_1.1.1             rhdf5filters_1.13.3      </span></span>
+<span><span class="co">#&gt;  [75] fansi_1.0.4               digest_0.6.31            </span></span>
+<span><span class="co">#&gt;  [77] R6_2.5.1                  mime_0.12                </span></span>
+<span><span class="co">#&gt;  [79] textshaping_0.3.6         colorspace_2.1-0         </span></span>
+<span><span class="co">#&gt;  [81] scattermore_1.2           tensor_1.5               </span></span>
+<span><span class="co">#&gt;  [83] spatstat.data_3.0-1       RSQLite_2.3.1            </span></span>
+<span><span class="co">#&gt;  [85] R.methodsS3_1.8.2         utf8_1.2.3               </span></span>
+<span><span class="co">#&gt;  [87] tidyr_1.3.0               generics_0.1.3           </span></span>
+<span><span class="co">#&gt;  [89] data.table_1.14.8         httr_1.4.6               </span></span>
+<span><span class="co">#&gt;  [91] htmlwidgets_1.6.2         S4Arrays_1.1.4           </span></span>
+<span><span class="co">#&gt;  [93] uwot_0.1.14               pkgconfig_2.0.3          </span></span>
+<span><span class="co">#&gt;  [95] gtable_0.3.3              blob_1.2.4               </span></span>
+<span><span class="co">#&gt;  [97] lmtest_0.9-40             XVector_0.41.1           </span></span>
+<span><span class="co">#&gt;  [99] htmltools_0.5.5           scales_1.2.1             </span></span>
+<span><span class="co">#&gt; [101] png_0.1-8                 knitr_1.43               </span></span>
+<span><span class="co">#&gt; [103] reshape2_1.4.4            nlme_3.1-162             </span></span>
+<span><span class="co">#&gt; [105] curl_5.0.1                rhdf5_2.45.0             </span></span>
+<span><span class="co">#&gt; [107] cachem_1.0.8              zoo_1.8-12               </span></span>
+<span><span class="co">#&gt; [109] stringr_1.5.0             KernSmooth_2.23-21       </span></span>
+<span><span class="co">#&gt; [111] parallel_4.3.0            miniUI_0.1.1.1           </span></span>
+<span><span class="co">#&gt; [113] desc_1.4.2                pillar_1.9.0             </span></span>
+<span><span class="co">#&gt; [115] grid_4.3.0                vctrs_0.6.3              </span></span>
+<span><span class="co">#&gt; [117] RANN_2.6.1                promises_1.2.0.1         </span></span>
+<span><span class="co">#&gt; [119] beachmat_2.17.8           dbplyr_2.3.2             </span></span>
+<span><span class="co">#&gt; [121] xtable_1.8-4              cluster_2.1.4            </span></span>
+<span><span class="co">#&gt; [123] evaluate_0.21             locfit_1.5-9.8           </span></span>
+<span><span class="co">#&gt; [125] cli_3.6.1                 compiler_4.3.0           </span></span>
+<span><span class="co">#&gt; [127] rlang_1.1.1               crayon_1.5.2             </span></span>
+<span><span class="co">#&gt; [129] future.apply_1.11.0       labeling_0.4.2           </span></span>
+<span><span class="co">#&gt; [131] plyr_1.8.8                fs_1.6.2                 </span></span>
+<span><span class="co">#&gt; [133] stringi_1.7.12            viridisLite_0.4.2        </span></span>
+<span><span class="co">#&gt; [135] deldir_1.0-9              BiocParallel_1.35.2      </span></span>
+<span><span class="co">#&gt; [137] munsell_0.5.0             lazyeval_0.2.2           </span></span>
+<span><span class="co">#&gt; [139] spatstat.geom_3.2-1       Matrix_1.5-4.1           </span></span>
+<span><span class="co">#&gt; [141] patchwork_1.1.2           sparseMatrixStats_1.13.0 </span></span>
+<span><span class="co">#&gt; [143] bit64_4.0.5               future_1.32.0            </span></span>
+<span><span class="co">#&gt; [145] Rhdf5lib_1.23.0           ggplot2_3.4.2            </span></span>
+<span><span class="co">#&gt; [147] shiny_1.7.4               highr_0.10               </span></span>
+<span><span class="co">#&gt; [149] ROCR_1.0-11               igraph_1.5.0             </span></span>
+<span><span class="co">#&gt; [151] memoise_2.0.1             bslib_0.5.0              </span></span>
+<span><span class="co">#&gt; [153] bit_4.0.5</span></span></code></pre></div>
 </div>
 </div>
   </div>
