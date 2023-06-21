@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 1. Visit https://workshop.bioconductor.org/
 2. Register or log-in
-3. choose the 'ArtNET 2023'
+3. choose the 'ARTNet 2023'
 4. Wait a minute or so
 5. Click to open RStudio
 6. In RStudio, choose 'File' / 'Open File...' / 'vignettes/a_r.Rmd'
@@ -309,7 +309,7 @@ details.
 
 ```{r}
 ## use `file.choose()` or similar for your own data sets
-veteran_csv <- system.file(package = "ArtNET2023", "extdata/veteran.csv")
+veteran_csv <- system.file(package = "ARTNet2023", "extdata/veteran.csv")
 veteran <- readr::read_csv(veteran_csv)
 veteran
 ```

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 1. Visit https://workshop.bioconductor.org/
 2. Register or log-in
-3. choose the 'ArtNET 2023'
+3. choose the 'ARTNet 2023'
 4. Wait a minute or so
 5. Click to open RStudio
 6. In RStudio, choose 'File' / 'Open File...' / 'vignettes/a_r.Rmd'
@@ -44,6 +44,8 @@ work flows.
 
 We will use the [dplyr][] package for data manipulation.
 
+[dplyr]: https://cran.r-project.org/package=dplyr
+
 ```{r, message = FALSE}
 library(dplyr)
 ```
@@ -53,7 +55,7 @@ experiment.
 
 ```{r, message = FALSE}
 ## use `file.choose()` or similar for your own data sets
-cell_data_csv <- system.file(package = "ArtNET2023", "scrnaseq-cell-data.csv")
+cell_data_csv <- system.file(package = "ARTNet2023", "scrnaseq-cell-data.csv")
 cell_data <- readr::read_csv(cell_data_csv)
 cell_data |>
     glimpse()
@@ -114,7 +116,7 @@ ggplotly(plt) |>
 
 ```{r, message = FALSE}
 ## use `file.choose()` or similar for your own data sets
-row_data_csv <- system.file(package = "ArtNET2023", "scrnaseq-gene-data.csv")
+row_data_csv <- system.file(package = "ARTNet2023", "scrnaseq-gene-data.csv")
 row_data <- readr::read_csv(row_data_csv)
 row_data |>
     glimpse()

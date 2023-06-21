@@ -1,10 +1,10 @@
-# R / Bioconductor Workshop for ArtNET 2023 Annual Meeting
+# R / Bioconductor Workshop for ARTNet 2023 Annual Meeting
 
-## https://bit.ly/468FFyO
+## https://bit.ly/3CFhkD9
 
-![](man/figures/bit.ly_468FFyO.jpeg){width=200px}
+![](man/figures/bit.ly_3CFhkD9.jpeg){width=200px}
 
-This resource contains material presented at the ArtNET2023 Annual
+This resource contains material presented at the ARTNet2023 Annual
 Meeting, June, 2023 in Buffalo, New York.
 
 This two-hour workshop provides an introduction to using _R_ and
@@ -40,7 +40,7 @@ workshop includes
   `https://localhost:8787`.
 
     ```sh
-    docker run -e PASSWORD=<FIXME> -p 8787:8787 ghcr.io/mtmorgan/ArtNET2023:latest
+    docker run -e PASSWORD=<FIXME> -p 8787:8787 ghcr.io/mtmorgan/ARTNet2023:latest
     ```
 
 [cloud]: https://workshop.bioconductor.org/

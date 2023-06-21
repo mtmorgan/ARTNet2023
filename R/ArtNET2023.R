@@ -1,6 +1,6 @@
-#' @rdname ArtNET2023
+#' @rdname ARTNet2023
 #'
-#' @name ArtNET2023-package
+#' @name ARTNet2023-package
 #'
-#' @title ArtNET2023 Package
+#' @title ARTNet2023 Package
 NULL
