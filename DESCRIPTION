@@ -1,6 +1,6 @@
 Package: ARTNet2023
 Title: R / Bioconductor Workshop for ARTNet 2023 Annual Meeting
-Version: 0.0.0.5
+Version: 0.0.0.6
 Authors@R:
     c(person(
         "Martin", "Morgan",
@@ -8,7 +8,7 @@ Authors@R:
         email = "Martin.Morgan@RoswellPark.org",
         comment = c(ORCID = "0000-0002-5874-8148")
     ), person(
-        "NIH NHGRI U24HG004059",
+        "NIH NHGRI U24CA274159",
         role = "fnd"
     ))
 Description: This workshop provides an introduction to using R and
