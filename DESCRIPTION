@@ -1,6 +1,6 @@
 Package: ARTNet2023
 Title: R / Bioconductor Workshop for ARTNet 2023 Annual Meeting
-Version: 0.0.0.6
+Version: 0.0.0.7
 Authors@R:
     c(person(
         "Martin", "Morgan",
@@ -30,7 +30,7 @@ Suggests:
     plotly, SingleCellExperiment, AnnotationHub, ensembldb,
     BiocFileCache, Seurat, DropletUtils, scuttle,
     knitr, rmarkdown, pkgdown
-URL: https://mtmorgan.github.io/ArtNET2023/
-BugReports: https://github.com/mtmorgan/ArtNET2023/issues/new/choose
+URL: https://mtmorgan.github.io/ARTNet2023/
+BugReports: https://github.com/mtmorgan/ARTNet2023/issues/new/choose
 VignetteBuilder: knitr
-DockerImage: ghcr.io/mtmorgan/ArtNET2023:latest
+DockerImage: ghcr.io/mtmorgan/ARTNet2023:latest

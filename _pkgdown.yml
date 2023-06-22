@@ -1,4 +1,4 @@
-url: https://mtmorgan.github.io/ArtNET2023
+url: https://mtmorgan.github.io/ARTNET2023
 
 template:
   params:
@@ -13,6 +13,6 @@ home:
 navbar:
   right:
    - icon: fa-github
-     href: https://github.com/mtmorgan/ArtNET2023
+     href: https://github.com/mtmorgan/ARTNet2023
      
 
