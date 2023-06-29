@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ARTNet2023</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.0.9</span>
       </span>
     </div>
 
@@ -172,10 +172,14 @@ tutorial</a>, we read the data into a sparse matrix, and then into a
 Seurat object.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
-<span><span class="co">#&gt; will retire shortly. Please refer to R-spatial evolution reports on</span></span>
-<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
-<span><span class="co">#&gt; This package is now running under evolution status 0</span></span>
+<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
+<span><span class="co">#&gt; which was just loaded, will retire in October 2023.</span></span>
+<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
+<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
+<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
+<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
+<span><span class="co">#&gt; The sp package is now running under evolution status 2</span></span>
+<span><span class="co">#&gt;      (status 2 uses the sf package in place of rgdal)</span></span>
 <span><span class="co">#&gt; Attaching SeuratObject</span></span>
 <span></span>
 <span><span class="co">## read the 10x data as a sparse matrix</span></span>
@@ -407,26 +411,26 @@ software:</p>
 <span><span class="co">#&gt;  [1] scuttle_1.11.0              DropletUtils_1.21.0        </span></span>
 <span><span class="co">#&gt;  [3] SingleCellExperiment_1.23.0 SummarizedExperiment_1.31.1</span></span>
 <span><span class="co">#&gt;  [5] Biobase_2.61.0              GenomicRanges_1.53.1       </span></span>
-<span><span class="co">#&gt;  [7] GenomeInfoDb_1.37.1         IRanges_2.35.1             </span></span>
+<span><span class="co">#&gt;  [7] GenomeInfoDb_1.37.2         IRanges_2.35.2             </span></span>
 <span><span class="co">#&gt;  [9] S4Vectors_0.39.1            BiocGenerics_0.47.0        </span></span>
 <span><span class="co">#&gt; [11] MatrixGenerics_1.13.0       matrixStats_1.0.0          </span></span>
-<span><span class="co">#&gt; [13] SeuratObject_4.1.3          Seurat_4.3.0               </span></span>
+<span><span class="co">#&gt; [13] SeuratObject_4.1.3          Seurat_4.3.0.1             </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;   [1] RcppAnnoy_0.0.20          splines_4.3.0            </span></span>
 <span><span class="co">#&gt;   [3] later_1.3.1               bitops_1.0-7             </span></span>
 <span><span class="co">#&gt;   [5] filelock_1.0.2            tibble_3.2.1             </span></span>
 <span><span class="co">#&gt;   [7] R.oo_1.25.0               polyclip_1.10-4          </span></span>
-<span><span class="co">#&gt;   [9] lifecycle_1.0.3           edgeR_3.43.6             </span></span>
+<span><span class="co">#&gt;   [9] lifecycle_1.0.3           edgeR_3.43.7             </span></span>
 <span><span class="co">#&gt;  [11] rprojroot_2.0.3           globals_0.16.2           </span></span>
 <span><span class="co">#&gt;  [13] lattice_0.21-8            MASS_7.3-60              </span></span>
 <span><span class="co">#&gt;  [15] magrittr_2.0.3            limma_3.57.6             </span></span>
 <span><span class="co">#&gt;  [17] plotly_4.10.2             sass_0.4.6               </span></span>
 <span><span class="co">#&gt;  [19] rmarkdown_2.22            jquerylib_0.1.4          </span></span>
 <span><span class="co">#&gt;  [21] yaml_2.3.7                httpuv_1.6.11            </span></span>
-<span><span class="co">#&gt;  [23] sctransform_0.3.5         sp_1.6-1                 </span></span>
-<span><span class="co">#&gt;  [25] spatstat.sparse_3.0-1     reticulate_1.30          </span></span>
-<span><span class="co">#&gt;  [27] cowplot_1.1.1             pbapply_1.7-0            </span></span>
+<span><span class="co">#&gt;  [23] sctransform_0.3.5         sp_2.0-0                 </span></span>
+<span><span class="co">#&gt;  [25] spatstat.sparse_3.0-2     reticulate_1.30          </span></span>
+<span><span class="co">#&gt;  [27] cowplot_1.1.1             pbapply_1.7-2            </span></span>
 <span><span class="co">#&gt;  [29] DBI_1.1.3                 RColorBrewer_1.1-3       </span></span>
 <span><span class="co">#&gt;  [31] abind_1.4-5               zlibbioc_1.47.0          </span></span>
 <span><span class="co">#&gt;  [33] Rtsne_0.16                purrr_1.0.1              </span></span>
@@ -450,7 +454,7 @@ software:</p>
 <span><span class="co">#&gt;  [69] xfun_0.39                 HDF5Array_1.29.3         </span></span>
 <span><span class="co">#&gt;  [71] dplyr_1.1.2               withr_2.5.0              </span></span>
 <span><span class="co">#&gt;  [73] fastmap_1.1.1             rhdf5filters_1.13.3      </span></span>
-<span><span class="co">#&gt;  [75] fansi_1.0.4               digest_0.6.31            </span></span>
+<span><span class="co">#&gt;  [75] fansi_1.0.4               digest_0.6.32            </span></span>
 <span><span class="co">#&gt;  [77] R6_2.5.1                  mime_0.12                </span></span>
 <span><span class="co">#&gt;  [79] textshaping_0.3.6         colorspace_2.1-0         </span></span>
 <span><span class="co">#&gt;  [81] scattermore_1.2           tensor_1.5               </span></span>
@@ -459,7 +463,7 @@ software:</p>
 <span><span class="co">#&gt;  [87] tidyr_1.3.0               generics_0.1.3           </span></span>
 <span><span class="co">#&gt;  [89] data.table_1.14.8         httr_1.4.6               </span></span>
 <span><span class="co">#&gt;  [91] htmlwidgets_1.6.2         S4Arrays_1.1.4           </span></span>
-<span><span class="co">#&gt;  [93] uwot_0.1.14               pkgconfig_2.0.3          </span></span>
+<span><span class="co">#&gt;  [93] uwot_0.1.15               pkgconfig_2.0.3          </span></span>
 <span><span class="co">#&gt;  [95] gtable_0.3.3              blob_1.2.4               </span></span>
 <span><span class="co">#&gt;  [97] lmtest_0.9-40             XVector_0.41.1           </span></span>
 <span><span class="co">#&gt;  [99] htmltools_0.5.5           scales_1.2.1             </span></span>

@@ -5,7 +5,7 @@ articles:
   a_r: a_r.html
   b_single_cell: b_single_cell.html
   c_seurat_bioconductor: c_seurat_bioconductor.html
-last_built: 2023-06-22T15:52Z
+last_built: 2023-06-29T19:52Z
 urls:
   reference: https://mtmorgan.github.io/ARTNET2023/reference
   article: https://mtmorgan.github.io/ARTNET2023/articles
