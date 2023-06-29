@@ -1,6 +1,6 @@
 Package: ARTNet2023
 Title: R / Bioconductor Workshop for ARTNet 2023 Annual Meeting
-Version: 0.0.0.7
+Version: 0.0.0.9
 Authors@R:
     c(person(
         "Martin", "Morgan",
@@ -33,4 +33,4 @@ Suggests:
 URL: https://mtmorgan.github.io/ARTNet2023/
 BugReports: https://github.com/mtmorgan/ARTNet2023/issues/new/choose
 VignetteBuilder: knitr
-DockerImage: ghcr.io/mtmorgan/ARTNet2023:latest
+DockerImage: ghcr.io/mtmorgan/artnet2023:latest
